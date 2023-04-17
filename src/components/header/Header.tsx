@@ -23,19 +23,19 @@ export default function Header() {
   const menuItems = [
     {
       title: 'Dataset',
-      url: '#',
+      url: '/#',
     },
-    { title: 'Metadata', url: '#' },
-    { title: 'OPD', url: '#' },
-    { title: 'Grup Data', url: '#' },
+    { title: 'Metadata', url: '/#' },
+    { title: 'OPD', url: '/#' },
+    { title: 'Grup Data', url: '/#' },
     {
       title: 'Fitur Lainnya',
-      url: '#',
+      url: '/#',
       subItems: [
-        { title: 'Visualisasi', url: '#' },
-        { title: 'Infografis', url: '#' },
-        { title: 'Videografis', url: '#' },
-        { title: 'Peta Sebaran', url: '#' },
+        { title: 'Visualisasi', url: '/#' },
+        { title: 'Infografis', url: '/#' },
+        { title: 'Videografis', url: '/#' },
+        { title: 'Peta Sebaran', url: '/peta' },
       ],
     },
   ];
