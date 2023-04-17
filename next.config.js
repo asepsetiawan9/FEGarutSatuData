@@ -24,6 +24,10 @@ const nextConfig = {
         source: '/peta', // mau diganti jadi apa ?
         destination: '/peta/Index', // path lama ?
       },
+      {
+        source: '/peta/pembanding', // mau diganti jadi apa ?
+        destination: '/peta/Pembanding', // path lama ?
+      },
     ];
   },
   // async redirects() {

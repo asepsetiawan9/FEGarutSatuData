@@ -50,7 +50,6 @@ export default function Map({ dataKecamatan }: MapProps) {
     );
     const maxValue = Math.max(...arr);
     const range = Math.ceil(maxValue / 5);
-    console.log(feature);
 
     return {
       fillColor: getColor(nilaiValue, range),
@@ -140,12 +139,7 @@ export default function Map({ dataKecamatan }: MapProps) {
 
   return (
     <>
-      <MapContainer
-        className="z-0"
-        center={center}
-        zoom={5}
-        style={{ height: '100vh' }}
-      >
+      <MapContainer className="z-0" center={center} zoom={12}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
