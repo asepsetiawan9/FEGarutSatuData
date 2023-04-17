@@ -30,7 +30,6 @@ export default function Header() {
     { title: 'Grup Data', url: '/#' },
     {
       title: 'Fitur Lainnya',
-      url: '/#',
       subItems: [
         { title: 'Visualisasi', url: '/#' },
         { title: 'Infografis', url: '/#' },
@@ -82,10 +81,11 @@ export default function Header() {
                 >
                   <Link
                     className="border-b-2 border-transparent px-2 py-6 leading-[22px] text-[#46383c] hover:border-[#fa65b1] hover:text-[#fa65b1] md:px-3 lg:px-6"
-                    href={item?.url}
+                    href={item?.url ? item.url : '#'}
                   >
                     {item?.title}
                   </Link>
+
                   {item.subItems && (
                     <div
                       onMouseEnter={() => handleMenuItemHover(index)}
