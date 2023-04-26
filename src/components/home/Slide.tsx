@@ -56,22 +56,28 @@ export default function Slide() {
           Oleh Dinas Komunikasi dan Informatika
         </div>
         <div className="relative pt-3">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 pt-2">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pt-2.5">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              className="h-4 w-4 text-gray-500"
               viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="h-6 w-6"
+              fill="none"
             >
               <path
+                d="M9 17a8 8 0 100-16 8 8 0 000 16z"
+                stroke="currentColor"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+              <path
+                d="M23 23l-6.65-6.65"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </span>
           <input
             type="text"
             id="search"

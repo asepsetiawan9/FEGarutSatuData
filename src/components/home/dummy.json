@@ -1,0 +1,44 @@
+[
+  {
+    "category": "Artikel",
+    "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 1",
+    "bg": "bg-red-400"
+  },
+  {
+    "category": "Visualisasi",
+    "image": "https://dummyimage.com/400x400/581845/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 2",
+    "bg": "bg-green-100"
+  },
+  {
+    "category": "Infografis",
+    "image": "https://dummyimage.com/400x400/2ECC71/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 3",
+    "bg": "bg-blue-400"
+  },
+  {
+    "category": "Infografis",
+    "image": "https://dummyimage.com/400x400/3498DB/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 4",
+    "bg": "bg-green-400"
+  },
+  {
+    "category": "ABCS",
+    "image": "https://dummyimage.com/400x400/9B59B6/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 5",
+    "bg": "bg-yellow-400"
+  },
+  {
+    "category": "terakhir",
+    "image": "https://dummyimage.com/400x400/F1C40F/ffffff&text=",
+    "date": "02 Mei 1995",
+    "title": "judul 5",
+    "bg": "bg-slate-400"
+  }
+]

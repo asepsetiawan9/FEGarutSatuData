@@ -66,7 +66,7 @@ const Tabel = ({ data }: Props) => {
     <div className="mt-4">
       <div className="flex flex-col justify-center">
         <div className="flex flex-row justify-between">
-          <div>title</div>
+          <div>Data Covid 19</div>
           <div className="flex gap-2 text-sm">
             <span className="pt-1">Search :</span>
             <input
