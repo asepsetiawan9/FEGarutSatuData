@@ -1,57 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
+import artikelData from './dummy.json';
+
 export default function Artikel() {
-  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const artikelData = [
-    {
-      category: 'Artikel',
-      image: `${router.basePath}/assets/images/1.png`,
-      date: '02 Mei 1995',
-      title: 'judul 1',
-      bg: 'bg-red-400',
-    },
-    {
-      category: 'Visualisasi',
-      image: `${router.basePath}/assets/images/2.png`,
-      date: '02 Mei 1995',
-      title: 'judul 2',
-      bg: 'bg-green-100',
-    },
-    {
-      category: 'Infografis',
-      image: `${router.basePath}/assets/images/3.png`,
-      date: '02 Mei 1995',
-      title: 'judul 3',
-      bg: 'bg-blue-400',
-    },
-    {
-      category: 'Infografis',
-      image: `${router.basePath}/assets/images/3.png`,
-      date: '02 Mei 1995',
-      title: 'judul 4',
-      bg: 'bg-green-400',
-    },
-    {
-      category: 'ABCS',
-      image: `${router.basePath}/assets/images/3.png`,
-      date: '02 Mei 1995',
-      title: 'judul 5',
-      bg: 'bg-yellow-400',
-    },
-    {
-      category: 'terakhir',
-      image: `${router.basePath}/assets/images/3.png`,
-      date: '02 Mei 1995',
-      title: 'judul 5',
-      bg: 'bg-slate-400',
-    },
-  ];
-
   const dataLength = artikelData.length;
 
   const handlePrev = () => {
@@ -77,7 +31,7 @@ export default function Artikel() {
   };
 
   return (
-    <div className="flex flex-col justify-between gap-4">
+    <div className="flex flex-col justify-between gap-4 px-4">
       <div className="flex flex-row justify-between">
         <div className="font-bold">Highlight</div>
         <div className="flex gap-2">
@@ -95,18 +49,18 @@ export default function Artikel() {
           </button>
         </div>
       </div>
-      <div className="carousel-container">
-        <div className="carousel-wrapper flex gap-3">
+      <div className="carousel-container overflow-x-auto whitespace-nowrap">
+        <div className="carousel-wrapper flex gap-x-3">
           {artikelData
             .slice(activeIndex, activeIndex + 3)
             .map((item, index) => (
               <div key={index} className="flex w-full flex-col gap-1">
                 <div className="flex w-full flex-col gap-1">
-                  <div
-                    className={`h-[150px] max-h-[150px] rounded-md ${item.bg}`}
-                  >
-                    {' '}
-                  </div>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-[180px] max-w-full rounded-md object-cover"
+                  />
                   <div className="text-base font-bold">{item.title}</div>
                   <div className="flex place-items-center gap-4">
                     <span className="rounded-md bg-yellow-400 px-3 py-1 text-xs font-bold">
@@ -119,6 +73,27 @@ export default function Artikel() {
             ))}
         </div>
       </div>
+
+      {/* Additional code for small devices */}
+      <style jsx>{`
+        @media (max-width: 640px) {
+          .carousel-container {
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+          }
+          .carousel-wrapper {
+            scroll-snap-align: center;
+            flex-wrap: nowrap;
+          }
+          .carousel-wrapper > div {
+            scroll-snap-stop: always;
+            margin-right: 16px;
+            flex: 0 0 calc(100% - 16px);
+            width: 320px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

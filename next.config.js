@@ -28,6 +28,14 @@ const nextConfig = {
         source: '/peta/pembanding', // mau diganti jadi apa ?
         destination: '/peta/Pembanding', // path lama ?
       },
+      {
+        source: '/grupdata', // mau diganti jadi apa ?
+        destination: '/grupdata/Index', // path lama ?
+      },
+      {
+        source: '/grupdata/', // mau diganti jadi apa ?
+        destination: '/grupdata/[slug]', // path lama ?
+      },
     ];
   },
   // async redirects() {

@@ -1,0 +1,289 @@
+[
+  {
+    "id": 1,
+    "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+    "title": "Administrasi dan Kependudukan",
+    "description": "Berisi dataset tentang administrasi dan kependudukan di kabupaten garut",
+    "slug": "Administrasi-dan-Kependudukan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 1",
+        "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+        "description": "Deskripsi Data 1 Grup Data 1",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 1",
+        "description": "Deskripsi Data 2 Grup Data 1",
+        "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+    "title": "Kesehatan",
+    "slug": "Kesehatan",
+    "description": "Berisi dataset tentang administrasi dan kependudukan di kabupaten garut",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "description": "Deskripsi Data 1 Grup Data 2",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 2",
+        "description": "Deskripsi Data 2 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 2",
+        "description": "Deskripsi Data 3 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "image": "https://dummyimage.com/400x400/581845/ffffff&text=",
+    "title": "Insidensial dan Kebencanaan",
+    "slug": "Insidensial-dan-Kebencanaan",
+    "description": "Berisi dataset tentang administrasi dan kependudukan di kabupaten garut",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 3",
+        "description": "Deskripsi Data 1 Grup Data 3",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 3",
+        "description": "Deskripsi Data 2 Grup Data 3",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 2",
+        "description": "Deskripsi Data 3 Grup Data 3",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "image": "https://dummyimage.com/400x400/2ECC71/ffffff&text=",
+    "title": "Ekonomi dan Keuangan",
+    "slug": "Ekonomi-dan-Keuangan",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "image": "https://dummyimage.com/400x400/3498DB/ffffff&text=",
+    "title": "Ekonomi dan Keuangan",
+    "slug": "Ekonomi-dan-Keuangan1",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "image": "https://dummyimage.com/400x400/9B59B6/ffffff&text=",
+    "title": "Ekonomi dan Keuangan",
+    "slug": "Ekonomi-dan-Keuangan2",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "image": "https://dummyimage.com/400x400/F1C40F/ffffff&text=",
+    "title": "Ekonomi dan Keuangan",
+    "slug": "Ekonomi-dan-Keuangan3",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 4,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 5,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "image": "https://dummyimage.com/400x400/2C3E50/ffffff&text=",
+    "title": "Ekonomi dan Keuangan",
+    "slug": "Ekonomi-dan-Keuangan4",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 4,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 5,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 6,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 7,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 8,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  }
+]

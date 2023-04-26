@@ -70,10 +70,10 @@ export default function Map({ dataKecamatan }: MapProps) {
         layer.setStyle({ color: '#232323', weight: 3 });
         layer
           .bindPopup(
-            `<b>${feature.properties.positif}</b> <br />
+            `<b>Data Covid 19</b> <br />
             <b>${feature.properties.kecamatan}</b><br />
              Total : ${feature.properties.nilai}<br />
-             Keterangan ${feature.properties.keterangan}`
+             Keterangan : Tidak Ada Keterangan`
           )
           .openPopup();
       },

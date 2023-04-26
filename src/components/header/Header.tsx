@@ -27,7 +27,7 @@ export default function Header() {
     },
     { title: 'Metadata', url: '/#' },
     { title: 'OPD', url: '/#' },
-    { title: 'Grup Data', url: '/#' },
+    { title: 'Grup Data', url: '/grupdata' },
     {
       title: 'Fitur Lainnya',
       subItems: [
@@ -56,7 +56,7 @@ export default function Header() {
         animateHeader && 'shadow-xl'
       }`}
     >
-      <div className="mx-auto ">
+      <div className="mx-auto shadow-md">
         <div
           // eslint-disable-next-line tailwindcss/no-custom-classname
           className={`flex max-w-screen-xl py-10 ${
