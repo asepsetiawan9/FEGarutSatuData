@@ -57,7 +57,7 @@ export default function Map({ dataKecamatan }: MapProps) {
       opacity: 1,
       color: '#777', // warna border
       dashArray: '3',
-      fillOpacity: 0.7,
+      fillOpacity: 0.8,
       // feature._leaflet_pos || new Point(0, 0),
     };
     // return el._leaflet_pos || new Point(0, 0);
@@ -70,7 +70,7 @@ export default function Map({ dataKecamatan }: MapProps) {
         layer.setStyle({ color: '#232323', weight: 3 });
         layer
           .bindPopup(
-            `<b>Data Covid 19</b> <br />
+            `<b>${feature.properties.judulData}</b> <br />
             <b>${feature.properties.kecamatan}</b><br />
              Total : ${feature.properties.nilai}<br />
              Keterangan : Tidak Ada Keterangan`

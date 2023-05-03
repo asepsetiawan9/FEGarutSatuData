@@ -26,7 +26,7 @@ export default function Header() {
       url: '/#',
     },
     { title: 'Metadata', url: '/#' },
-    { title: 'OPD', url: '/#' },
+    { title: 'OPD', url: '/opds' },
     { title: 'Grup Data', url: '/grupdata' },
     {
       title: 'Fitur Lainnya',

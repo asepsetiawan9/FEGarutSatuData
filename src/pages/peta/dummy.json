@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "sumber": "Diskominfo",
+    "sumberData": [
+      {
+        "id": 1,
+        "element": "Persentase Stunting",
+        "dataTahun": [
+          {
+            "id": 1,
+            "tahun": "2022",
+            "url": "kecamatan.json"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "sumber": "Disdukcapil",
+    "sumberData": [
+      {
+        "id": 1,
+        "element": "Persentase Pertumbuhan Penduduk",
+        "dataTahun": [
+          {
+            "id": 1,
+            "tahun": "2022",
+            "url": "provinsi.json"
+          },
+          {
+            "id": 1,
+            "tahun": "2021",
+            "url": "stunting.json"
+          }
+        ]
+      }
+    ]
+  }
+]
