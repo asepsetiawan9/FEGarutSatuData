@@ -40,6 +40,10 @@ const nextConfig = {
         source: '/infografik', // mau diganti jadi apa ?
         destination: '/infografik/Index', // path lama ?
       },
+      {
+        source: '/datasets', // mau diganti jadi apa ?
+        destination: '/datasets/Index', // path lama ?
+      },
     ];
   },
   // async redirects() {

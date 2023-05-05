@@ -23,7 +23,7 @@ export default function Header() {
   const menuItems = [
     {
       title: 'Dataset',
-      url: '/#',
+      url: '/datasets',
     },
     { title: 'Metadata', url: '/#' },
     { title: 'OPD', url: '/opds' },
