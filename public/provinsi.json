@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "judul": "Data Kemiskinan",
+  "judul": "Data Jumlah Penduduk",
   "title": [
     "Kecamatan",
     "Element",
@@ -21,7 +21,7 @@
         "satuan": "3205280",
         "nilai": 55,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 1
       },
       "geometry": {
@@ -1153,7 +1153,7 @@
         "satuan": "3205160",
         "nilai": 54,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 139
       },
       "geometry": {
@@ -2290,7 +2290,7 @@
         "satuan": "3205260",
         "nilai": 166,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 48
       },
       "geometry": {
@@ -3550,7 +3550,7 @@
         "satuan": "3205110",
         "nilai": 17,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 23
       },
       "geometry": {
@@ -4389,7 +4389,7 @@
         "satuan": "3205182",
         "nilai": 123,
         "pdp": 4,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 52
       },
       "geometry": {
@@ -5203,7 +5203,7 @@
         "satuan": "3205171",
         "nilai": 37,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -6510,7 +6510,7 @@
         "satuan": "3205261",
         "nilai": 90,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -7473,7 +7473,7 @@
         "satuan": "3205120",
         "nilai": 58,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 48
       },
       "geometry": {
@@ -9304,7 +9304,7 @@
         "satuan": "3205212",
         "nilai": 66,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -10757,7 +10757,7 @@
         "satuan": "3205310",
         "nilai": 131,
         "pdp": 4,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -12958,7 +12958,7 @@
         "satuan": "3205011",
         "nilai": 6,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -14655,7 +14655,7 @@
         "satuan": "3205170",
         "nilai": 56,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 1
       },
       "geometry": {
@@ -15718,7 +15718,7 @@
         "satuan": "3205250",
         "nilai": 49,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -17132,7 +17132,7 @@
         "satuan": "3205060",
         "nilai": 68,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -18491,7 +18491,7 @@
         "satuan": "3205140",
         "nilai": 120,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -20979,7 +20979,7 @@
         "satuan": "3205010",
         "nilai": 32,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -22793,7 +22793,7 @@
         "satuan": "3205240",
         "nilai": 80,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -24313,7 +24313,7 @@
         "satuan": "3205270",
         "nilai": 104,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -25012,7 +25012,7 @@
         "satuan": "3205030",
         "nilai": 4,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -27273,7 +27273,7 @@
         "satuan": "3205161",
         "nilai": 68,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -28462,7 +28462,7 @@
         "satuan": "3205290",
         "nilai": 46,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -30513,7 +30513,7 @@
         "satuan": "3205190",
         "nilai": 73,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 132
       },
       "geometry": {
@@ -32185,7 +32185,7 @@
         "satuan": "3205020",
         "nilai": 29,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -33624,7 +33624,7 @@
         "satuan": "3205100",
         "nilai": 48,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -34293,7 +34293,7 @@
         "satuan": "3205300",
         "nilai": 54,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 131
       },
       "geometry": {
@@ -36344,7 +36344,7 @@
         "satuan": "3205111",
         "nilai": 1,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -36980,7 +36980,7 @@
         "satuan": "3205040",
         "nilai": 70,
         "pdp": 2,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -38356,7 +38356,7 @@
         "satuan": "3205130",
         "nilai": 24,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 6
       },
       "geometry": {
@@ -39354,7 +39354,7 @@
         "satuan": "3205181",
         "nilai": 144,
         "pdp": 4,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 65
       },
       "geometry": {
@@ -40425,7 +40425,7 @@
         "satuan": "3205050",
         "nilai": 22,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -42289,7 +42289,7 @@
         "satuan": "3205221",
         "nilai": 9,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -43084,7 +43084,7 @@
         "satuan": "3205151",
         "nilai": 19,
         "pdp": 3,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 91
       },
       "geometry": {
@@ -44024,7 +44024,7 @@
         "satuan": "3205090",
         "nilai": 41,
         "pdp": 3,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -45383,7 +45383,7 @@
         "satuan": "3205080",
         "nilai": 159,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -46904,7 +46904,7 @@
         "satuan": "3205031",
         "nilai": 29,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -47840,7 +47840,7 @@
         "satuan": "3205070",
         "nilai": 6,
         "pdp": 0,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -48837,7 +48837,7 @@
         "satuan": "3205220",
         "nilai": 107,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -50437,7 +50437,7 @@
         "satuan": "3205150",
         "nilai": 63,
         "pdp": 4,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {
@@ -51689,7 +51689,7 @@
         "satuan": "3205230",
         "nilai": 61,
         "pdp": 7,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 10
       },
       "geometry": {
@@ -53269,7 +53269,7 @@
         "satuan": "3205210",
         "nilai": 52,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 57
       },
       "geometry": {
@@ -54284,7 +54284,7 @@
         "satuan": "3205200",
         "nilai": 82,
         "pdp": 5,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 16
       },
       "geometry": {
@@ -55474,7 +55474,7 @@
         "satuan": "3205211",
         "nilai": 5,
         "pdp": 1,
-        "judulData": "kemiskinan",
+        "judulData": "Jumlah Penduduk",
         "keterangan": 0
       },
       "geometry": {

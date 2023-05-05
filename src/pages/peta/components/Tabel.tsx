@@ -17,6 +17,8 @@ interface Props {
 }
 
 const Tabel = ({ data }: Props) => {
+  // console.log(data.judul);
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const tableData: TableData[] = data.features.map(
@@ -66,7 +68,7 @@ const Tabel = ({ data }: Props) => {
     <div className="mt-4">
       <div className="flex flex-col justify-center">
         <div className="flex flex-row justify-between">
-          <div>Data Covid 19</div>
+          <div>{data.judul || 'Data Tabel'}</div>
           <div className="flex gap-2 text-sm">
             <span className="pt-1">Search :</span>
             <input

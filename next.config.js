@@ -33,8 +33,12 @@ const nextConfig = {
         destination: '/grupdata/Index', // path lama ?
       },
       {
-        source: '/grupdata/', // mau diganti jadi apa ?
-        destination: '/grupdata/[slug]', // path lama ?
+        source: '/opds', // mau diganti jadi apa ?
+        destination: '/opds/Index', // path lama ?
+      },
+      {
+        source: '/infografik', // mau diganti jadi apa ?
+        destination: '/infografik/Index', // path lama ?
       },
     ];
   },

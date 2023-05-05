@@ -1,0 +1,329 @@
+[
+  {
+    "id": 1,
+    "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+    "judul": "Dinas Komunikasi dan Informatika",
+    "description": "Lorem Ipsum dolor sit amet constectuar",
+    "slug": "Dinas-Komunikasi-dan-Informatika",
+    "jmldataset": 10,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 1",
+        "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+        "description": "Deskripsi Data 1 Grup Data 1",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 1",
+        "description": "Deskripsi Data 2 Grup Data 1",
+        "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "image": "https://dummyimage.com/400x400/900C3F/ffffff&text=",
+    "judul": "Dinas Kesehatan",
+    "slug": "Dinas-Kesehatan",
+    "description": "Lorem Ipsum dolor sit amet constectuart",
+    "jmldataset": 2,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "description": "Deskripsi Data 1 Grup Data 2",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 2",
+        "description": "Deskripsi Data 2 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 2",
+        "description": "Deskripsi Data 3 Grup Data 2",
+        "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "image": "https://dummyimage.com/400x400/581845/ffffff&text=",
+    "judul": "Badan Perencanaan dan Pembangunan Daerah",
+    "slug": "Badan-Perencanaan-dan-Pembangunan-Daerah",
+    "description": "Lorem Ipsum dolor sit amet constectuart",
+    "jmldataset": 13,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 3",
+        "description": "Deskripsi Data 1 Grup Data 3",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 3",
+        "description": "Deskripsi Data 2 Grup Data 3",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 2",
+        "description": "Deskripsi Data 3 Grup Data 3",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "image": "https://dummyimage.com/400x400/2ECC71/ffffff&text=",
+    "judul": "Dinas Pendidikan",
+    "slug": "Dinas-Pendidikan",
+    "description": "Berisi dataset tentang data ekonomi dan keuangan",
+    "jmldataset": 11,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "image": "https://dummyimage.com/400x400/3498DB/ffffff&text=",
+    "judul": "Sekretariat Daerah",
+    "slug": "Sekretariat-Daerah",
+    "description": "Lorem Ipsum dolor sit amet constectuar",
+    "jmldataset": 6,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "image": "https://dummyimage.com/400x400/9B59B6/ffffff&text=",
+    "judul": "Dinas Perindustrian dan Perdagangan",
+    "slug": "Dinas-Perindustrian-dan-Perdagangan",
+    "description": "Lorem Ipsum dolor sit amet constectuar",
+    "jmldataset": 7,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "image": "https://dummyimage.com/400x400/F1C40F/ffffff&text=",
+    "judul": "Dinas Perhubungan",
+    "slug": "Dinas-Perhubungan",
+    "description": "Lorem Ipsum dolor sit amet constectuar",
+    "jmldataset": 9,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 4,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 5,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "image": "https://dummyimage.com/400x400/2C3E50/ffffff&text=",
+    "judul": "Dinas Ketahanan Pangan",
+    "slug": "Dinas-Ketahanan-Pangan",
+    "description": "Lorem Ipsum dolor sit amet constectuar",
+    "jmldataset": 10,
+    "tlp": "(0262) 578149",
+    "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+    "website": "http://www.bkd.jabarprov.go.id/",
+    "email": "bkd@jabarprov.go.id",
+    "data": [
+      {
+        "id": 1,
+        "title": "Data 1 Grup Data 4",
+        "description": "Deskripsi Data 1 Grup Data 4",
+        "date": "2022-02-20",
+        "opd": "OPD 1"
+      },
+      {
+        "id": 2,
+        "title": "Data 2 Grup Data 4",
+        "description": "Deskripsi Data 2 Grup Data 4",
+        "date": "2022-02-21",
+        "opd": "OPD 2"
+      },
+      {
+        "id": 3,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 4,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 5,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 6,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 7,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      },
+      {
+        "id": 8,
+        "title": "Data 3 Grup Data 4",
+        "description": "Deskripsi Data 3 Grup Data 4",
+        "date": "2022-02-22",
+        "opd": "OPD 3"
+      }
+    ]
+  }
+]

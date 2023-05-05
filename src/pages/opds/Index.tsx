@@ -11,14 +11,14 @@ import data from './dummy.json';
 // import Tabel from './Tabel';
 
 const Index = () => {
-  const countData = data.map((group) => group.data.length);
+  // const countData = data.length;
   const [searchResults, setSearchResults] = useState(data);
-  const jumlahData = searchResults.length;
+  const countData = searchResults.length;
 
   const handleSearch = (event: { target: { value: any } }) => {
     const keyword = event.target.value;
     const results = data.filter((item) =>
-      item.title.toLowerCase().includes(keyword.toLowerCase())
+      item.judul.toLowerCase().includes(keyword.toLowerCase())
     );
     setSearchResults(results);
   };
@@ -27,17 +27,17 @@ const Index = () => {
     <Main
       meta={
         <Meta
-          title="Grup Data"
-          description="Satu Data Garut adalah portal terintegrasi untuk pengelolaan, keterbukaan, dan kemudahan akses data bagi warga dan pemerintah Kabupaten Garut."
+          title="SKPD / OPD"
+          description="OPD merupakan kumpulan produsen data yang menghasilkan data-data pada Garut Satu Data."
         />
       }
     >
       <BreadcrumbsWrapper>
         <div className="px-4">
-          <h1 className="font-bold">Grup Data</h1>
+          <h1 className="font-bold">OPD</h1>
           <p className="!my-1.5 text-base">
-            Grup Data merupakan pengelompokan dataset berdasarkan topik atau
-            kategori.
+            OPD merupakan kumpulan produsen data yang menghasilkan data-data
+            pada Garut Satu Data.
           </p>
           <div className="my-4 flex gap-4">
             <div className="relative w-full">
@@ -67,14 +67,14 @@ const Index = () => {
                 type="text"
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-10 text-sm text-gray-900 focus:outline-[#fa65b1]"
-                placeholder="Cari Grup Data ..."
+                placeholder="Cari OPD ..."
                 onChange={handleSearch}
               />
             </div>
           </div>
           <div className="flex flex-row justify-between ">
             <span className="pt-2.5 text-sm font-bold">
-              {jumlahData || '0'} Grup Data
+              {countData || '0'} Jumlah OPD
             </span>
             <div className="flex flex-row gap-3">
               <span className="pt-2.5 text-sm">Urutkan :</span>
@@ -94,27 +94,32 @@ const Index = () => {
           </div>
           <div className="mb-5 mt-2 w-full border-b border-[#acacac]"></div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {searchResults.map((item, index) => (
-              <a
-                key={item.id}
-                href={`grupdata/${item.slug}`}
-                className="no-underline decoration-black hover:no-underline"
-              >
-                <div>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-[180px] w-full rounded-md object-cover"
-                  />
-                  <p className="!my-1 text-base font-bold">{item.title}</p>
-                  <p className="!my-1 text-base">{item.description}</p>
-                  <div className="flex flex-row gap-2 py-2 text-base">
-                    <FiPackage className="mt-1 " />
-                    <span>Jumlah data: {countData[index]}</span>
+            {searchResults.length === 0 ? (
+              <p className="col-span-4 text-center">Data Tidak Ditemukan</p>
+            ) : (
+              searchResults.map((item) => (
+                <a
+                  key={item.id}
+                  href={`opds/${item.slug}`}
+                  className="no-underline decoration-black hover:no-underline"
+                >
+                  <div className="text-center">
+                    <img
+                      src={item.image}
+                      alt={item.judul}
+                      className="h-[180px] w-full rounded-md object-cover"
+                    />
+                    <p className="!my-1 text-base font-bold">{item.judul}</p>
+                    <div className="flex flex-row justify-center gap-2 py-2 align-bottom text-base">
+                      <FiPackage className="mt-1 " />
+                      <span>
+                        Jumlah data: {item.jmldataset ? item.jmldataset : '0'}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              ))
+            )}
           </div>
         </div>
       </BreadcrumbsWrapper>
