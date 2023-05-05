@@ -36,6 +36,10 @@ const nextConfig = {
         source: '/opds', // mau diganti jadi apa ?
         destination: '/opds/Index', // path lama ?
       },
+      {
+        source: '/infografik', // mau diganti jadi apa ?
+        destination: '/infografik/Index', // path lama ?
+      },
     ];
   },
   // async redirects() {

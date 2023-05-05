@@ -32,7 +32,7 @@ export default function Header() {
       title: 'Fitur Lainnya',
       subItems: [
         { title: 'Visualisasi', url: '/#' },
-        { title: 'Infografis', url: '/#' },
+        { title: 'Infografis', url: '/infografik' },
         { title: 'Videografis', url: '/#' },
         { title: 'Peta Sebaran', url: '/peta' },
       ],

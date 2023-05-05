@@ -82,7 +82,7 @@ const opds = () => {
                 type="text"
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-3 text-sm text-gray-900 focus:outline-[#fa65b1]"
-                placeholder="Pilih OPD"
+                placeholder="Pilih Sektoral"
               />
             </div>
             <div>
