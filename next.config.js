@@ -41,6 +41,10 @@ const nextConfig = {
         destination: '/infografik/Index', // path lama ?
       },
       {
+        source: '/videografik', // mau diganti jadi apa ?
+        destination: '/videografik/Index', // path lama ?
+      },
+      {
         source: '/datasets', // mau diganti jadi apa ?
         destination: '/datasets/Index', // path lama ?
       },
