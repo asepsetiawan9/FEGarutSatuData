@@ -192,6 +192,7 @@ const Index = () => {
                         alt={item.judul}
                         className="h-[120px] w-full rounded-md object-cover"
                       />
+
                     </div>
 
                     <div className="col-span-3 flex flex-col justify-between">
@@ -261,9 +262,9 @@ const Index = () => {
                     <button
                       key={i}
                       onClick={() => handlePageChange(i + 1)}
-                      className={`mx-1 rounded-md px-4 py-2 ${
+                      className={`mx-1 rounded-md border px-4 py-2 ${
                         currentPage === i + 1
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-[#16A75C] text-white'
                           : 'bg-white text-gray-700'
                       }`}
                     >

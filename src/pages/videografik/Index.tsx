@@ -88,40 +88,17 @@ const Index = () => {
     setShowModal(true);
   };
 
-  const handleDownloadClick = (item: {
-    id?: number;
-    image: any;
-    opd?: string;
-    sektoral?: string;
-    description?: string;
-    slug?: string;
-    judul: any;
-    tlp?: string;
-    alamat?: string;
-    website?: string;
-    email?: string;
-  }) => {
-    const link = document.createElement('a');
-    link.download = item.judul;
-    link.href = item.image;
-    link.target = '_blank';
-    link.click();
-  };
-
-  const handleImageClick = () => {
-    setZoomed(!zoomed);
-  };
-
-  const handleCloseClick = () => {
-    setShowModal(false);
-    setZoomed(false);
-  };
-
-  const handleModalClick = (e) => {
-    if (e.target === e.currentTarget) {
-      setShowModal(false);
-      setZoomed(false);
-    }
+  const handleDownloadClick = async (item) => {
+    const response = await fetch('/dummyvideo.mp4');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${item.judul}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
   };
 
   const totalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE);
@@ -140,9 +117,9 @@ const Index = () => {
     >
       <BreadcrumbsWrapper>
         <div className="px-4">
-          <h1 className="font-bold">Infografik</h1>
+          <h1 className="font-bold">Videografik</h1>
           <p className="!my-1.5 text-base">
-            Infografik adalah informasi yang disajikan dalam bentuk grafik agar
+            Videografik adalah informasi yang disajikan dalam bentuk video agar
             lebih mudah dipahami.
           </p>
           <div className="my-4 grid grid-cols-8 place-content-center gap-3">
@@ -224,11 +201,11 @@ const Index = () => {
             ) : (
               itemsToShow.map((item) => (
                 <div key={item.id}>
-                  <img
-                    alt={item.judul}
-                    src={item.image}
-                    className=" w-full rounded-md object-cover"
-                  />
+                  <video controls className="w-full rounded-md object-cover">
+                    <source src="dummyvideo.mp4" type="video/mp4" />
+                    Sorry, your browser doesnt support embedded videos.
+                  </video>
+
                   <p className="!my-1 text-center text-base font-bold">
                     {item.judul}
                   </p>
@@ -294,9 +271,9 @@ const Index = () => {
                   <button
                     key={i}
                     onClick={() => handlePageChange(i + 1)}
-                    className={`mx-1 rounded-md px-4 py-2 ${
+                    className={`mx-1 rounded-md border px-4 py-2 ${
                       currentPage === i + 1
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-[#16A75C] text-white'
                         : 'bg-white text-gray-700'
                     }`}
                   >
@@ -309,12 +286,10 @@ const Index = () => {
           {selectedItem && showModal && (
             <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
               <div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-2 text-sm">
-                <img
-                  alt={selectedItem.judul}
-                  src={selectedItem.image}
-                  className={`modal-image${zoomed ? ' zoomed' : ''} rounded`}
-                  onClick={() => setZoomed(!zoomed)}
-                />
+                <video controls className="w-full rounded-md object-cover">
+                  <source src="dummyvideo.mp4" type="video/mp4" />
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
                 <div className="py-1 text-center font-bold">
                   {selectedItem.judul}
                 </div>
