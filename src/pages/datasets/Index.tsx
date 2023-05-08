@@ -176,50 +176,58 @@ const Index = () => {
             ) : (
               itemsToShow.map((item) => (
                 // eslint-disable-next-line react/jsx-key
-                <div className="grid grid-cols-5 gap-4">
-                  <div key={item.id}>
-                    <img
-                      src={
-                        'image' in item && item.image
-                          ? item.image
-                          : 'https://garutkab.go.id/assets/img/no-image.jpeg'
-                      }
-                      alt={item.title}
-                      className="h-[120px] w-full rounded-md object-cover"
-                    />
-                  </div>
+                <a
+                  key={item.id}
+                  href={`datasets/${item.slug}`}
+                  className="no-underline decoration-black hover:no-underline"
+                >
+                  <div className="grid grid-cols-5 gap-4">
+                    <div key={item.id}>
+                      <img
+                        src={
+                          'image' in item && item.image
+                            ? item.image
+                            : 'https://garutkab.go.id/assets/img/no-image.jpeg'
+                        }
+                        alt={item.judul}
+                        className="h-[120px] w-full rounded-md object-cover"
+                      />
+                    </div>
 
-                  <div className="col-span-3 flex flex-col justify-between">
-                    <div>
-                      <p className="!my-1 text-base font-bold">{item.judul}</p>
-                      <p className="!my-1 text-base">{item.description}</p>
+                    <div className="col-span-3 flex flex-col justify-between">
+                      <div>
+                        <p className="!my-1 text-base font-bold">
+                          {item.judul}
+                        </p>
+                        <p className="!my-1 text-base">{item.description}</p>
+                      </div>
+                      <div className="my-2 flex flex-row gap-5">
+                        <div className="flex flex-row gap-2 text-sm">
+                          <FiUser className="mt-1" />
+                          <span>{item.opd || ''}</span>
+                        </div>
+                        <div className="flex flex-row gap-2 text-sm">
+                          <FiGrid className="mt-1" />
+                          <span>Infrastruktur</span>
+                        </div>
+                        <div className="flex flex-row gap-2 text-sm">
+                          <FiCalendar className="mt-1" />
+                          <span>2019-2021 (3)</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="my-2 flex flex-row gap-5">
+                    <div className="flex flex-row justify-between">
                       <div className="flex flex-row gap-2 text-sm">
-                        <FiUser className="mt-1" />
-                        <span>{item.opd || ''}</span>
+                        <FiClock className="mt-1" />
+                        <span>5 Hari yang lalu</span>
                       </div>
-                      <div className="flex flex-row gap-2 text-sm">
-                        <FiGrid className="mt-1" />
-                        <span>Infrastruktur</span>
-                      </div>
-                      <div className="flex flex-row gap-2 text-sm">
-                        <FiCalendar className="mt-1" />
-                        <span>2019-2021 (3)</span>
+                      <div className="flex flex-row gap-2 text-center text-sm">
+                        <FiEye className="mt-1" />
+                        <span>120</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-row justify-between">
-                    <div className="flex flex-row gap-2 text-sm">
-                      <FiClock className="mt-1" />
-                      <span>5 Hari yang lalu</span>
-                    </div>
-                    <div className="flex flex-row gap-2 text-center text-sm">
-                      <FiEye className="mt-1" />
-                      <span>120</span>
-                    </div>
-                  </div>
-                </div>
+                </a>
               ))
             )}
           </div>

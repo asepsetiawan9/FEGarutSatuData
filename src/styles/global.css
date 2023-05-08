@@ -80,4 +80,43 @@
   transform: scale(1.5);
 }
 
+.activeTab {
+  border-color: transparent !important;
+  color: #10b981 !important; /* Warna hijau */
+}
+
+.activeTab .svg-inline--fa {
+  color: #10b981 !important; /* Warna hijau pada icon */
+}
+
+.activeTab:hover,
+.group:hover {
+  border-color: #e5e7eb;
+}
+
+.group {
+  border-color: transparent !important;
+  color: #6b7280 !important;
+}
+
+.group .svg-inline--fa {
+  color: #6b7280 !important;
+}
+
+.group:hover {
+  border-color: #e5e7eb;
+}
+
+/* Tambahkan kelas berikut */
+.activeTab .group {
+  color: #10b981 !important; /* Warna hijau pada teks pada saat tab aktif */
+  border-color: transparent;
+  outline: none;
+  outline-offset: 2px;
+  border-bottom-width: 2px;
+}
+
+
+
+
 
