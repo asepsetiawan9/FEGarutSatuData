@@ -33,7 +33,7 @@ export default function Header() {
       subItems: [
         { title: 'Visualisasi', url: '/#' },
         { title: 'Infografis', url: '/infografik' },
-        { title: 'Videografis', url: '/#' },
+        { title: 'Videografis', url: '/videografik' },
         { title: 'Peta Sebaran', url: '/peta' },
       ],
     },
