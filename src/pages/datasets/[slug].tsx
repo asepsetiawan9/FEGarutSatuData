@@ -1,5 +1,8 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable tailwindcss/no-custom-classname */
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import {
   FaClipboardList,
@@ -15,15 +18,16 @@ import BreadcrumbsWrapper from '@/components/Breadcrumbs';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-import Listdata from './components/Listdata';
 import data from './dummydetail.json';
 import daftarData from './dummylistdata.json';
 
 const Slug = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-
+  const router = useRouter();
   const [dataDetail] = useState(data);
   const [activeTab, setActiveTab] = useState('deskripsi');
+
+  const { slug } = router.query;
 
   const handleTabClick = (tabName: React.SetStateAction<string>) => {
     setActiveTab(tabName);
@@ -158,7 +162,7 @@ const Slug = () => {
 
         {activeTab === 'metadata' && (
           <div>
-            <h2 className="my-4 text-lg font-bold">Metadata</h2>
+            <h2 className="mb-4 text-base font-bold">Metadata</h2>
             <table className="w-full border text-left text-base">
               <tr>
                 <th className="border font-medium">
@@ -188,7 +192,37 @@ const Slug = () => {
           </div>
         )}
       </div>
-      <Listdata dataSend={daftarData} />
+
+      {/* daftar data */}
+      <div className="pb-2 text-base font-bold">Daftar Data</div>
+      <div className="flex flex-col gap-2 text-base">
+        {daftarData.map((dafData) => (
+          <Link href={`/datasets/${slug}/${dafData.tahun}`}>
+            <div key={data.id} className="flex flex-row justify-between">
+              <div>
+                {dafData.judul} - Tahun {dafData.tahun}
+              </div>
+              <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-1 !text-sm">
+                  <FiCalendar className="mt-1" /> {dafData.waktu}
+                </div>
+                <div className="flex flex-row gap-1 !text-sm">
+                  <FiEye className="mt-1" /> 10
+                </div>
+              </div>
+            </div>
+            <div className="mx-2 border-b-2 pt-2"></div>
+          </Link>
+        ))}
+      </div>
+      <div className="pb-2 pt-5 text-base font-bold">Rekomendasi Dataset</div>
+      <div className="flex flex-col gap-2 text-base">
+        <div>
+          Jumlah Penduduk Berdasarkan Usia Per Kecamatan di Kabupaten Garut
+        </div>
+        <div>Jumlah PNS di Kabupaten Garut</div>
+        <div>Ketersediaan Pangan di Kabupaten Garut</div>
+      </div>
     </Main>
   );
 };
