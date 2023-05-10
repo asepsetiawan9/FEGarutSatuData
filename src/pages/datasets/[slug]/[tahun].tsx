@@ -78,10 +78,6 @@ const Tahun = () => {
 
   const shareUrl = `http://localhost:3000${router.asPath}`;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
-  };
-
   useEffect(() => {
     // Panggil API atau lakukan operasi lain untuk mendapatkan data yang sesuai dengan slug dan tahun
     // Simpan data tersebut ke dalam state data
