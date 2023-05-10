@@ -192,7 +192,6 @@ const Index = () => {
                         alt={item.judul}
                         className="h-[120px] w-full rounded-md object-cover"
                       />
-
                     </div>
 
                     <div className="col-span-3 flex flex-col justify-between">

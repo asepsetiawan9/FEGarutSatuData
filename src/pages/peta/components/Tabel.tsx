@@ -17,8 +17,6 @@ interface Props {
 }
 
 const Tabel = ({ data }: Props) => {
-  // console.log(data.judul);
-
   const [searchTerm, setSearchTerm] = useState('');
 
   const tableData: TableData[] = data.features.map(

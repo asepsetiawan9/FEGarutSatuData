@@ -31,7 +31,7 @@ const Main = (props: IMainProps) => {
         <main className="content ms:px-0 w-full pt-[150px] text-xl md:px-24">
           {props.children}
         </main>
-        <div className="ms:grid-cols-2 mt-10 grid w-full grid-cols-3 gap-4 bg-[#E9E9E9] p-5 py-10 text-xl sm:mx-3 md:grid-cols-3 md:place-items-center md:px-24">
+        <div className="ms:grid-cols-2 mt-10 grid w-full grid-cols-3 gap-4 bg-[#E9E9E9] p-5 py-10 text-xl  md:grid-cols-3 md:place-items-center md:px-24">
           <div className="flex flex-col gap-2 self-start text-sm sm:text-center md:text-left">
             <div className="font-bold">Kontak Kami</div>
             <div>Dinas Komunikasi dan Informatika Kabupaten Garut</div>
