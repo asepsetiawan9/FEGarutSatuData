@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable tailwindcss/no-custom-classname */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -8,11 +9,24 @@
 import 'jspdf-autotable';
 import 'react-toastify/dist/ReactToastify.css';
 
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js';
 import jsPDF from 'jspdf';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import { CSVLink } from 'react-csv';
-import DataTable from 'react-data-table-component';
 import {
   BsFileEarmarkCodeFill,
   BsFiletypeJson,
@@ -44,9 +58,24 @@ import { Main } from '@/templates/Main';
 
 import dataTahun from './dummytahun.json';
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const Tahun = () => {
   const router = useRouter();
   // console.log(router.asPath);
+  const DataTable = dynamic(() => import('react-data-table-component'), {
+    ssr: false,
+  });
 
   const [activeTab, setActiveTab] = useState('standardata');
   const [activeTabTable, setActiveTabTable] = useState('tabel');
@@ -77,10 +106,6 @@ const Tahun = () => {
   };
 
   const shareUrl = `http://localhost:3000${router.asPath}`;
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
-  };
 
   useEffect(() => {
     // Panggil API atau lakukan operasi lain untuk mendapatkan data yang sesuai dengan slug dan tahun
@@ -179,6 +204,106 @@ const Tahun = () => {
         </div>
       </>
     );
+  };
+
+  const [labelFilter, setLabelFilter] = useState('');
+  const [labelFilterB, setLabelFilterB] = useState('index');
+  const [labelAtas, setLabelAtas] = useState('');
+  const [chartType, setChartType] = useState('Line');
+
+  const ChartComponent =
+    chartType === 'Bar' ? Bar : chartType === 'Line' ? Line : Pie;
+
+  const handleChangeChartType = (event) => {
+    setChartType(event.target.value);
+  };
+
+  const handleChangeAxisA = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    setLabelFilter(selectedIndex);
+  };
+  const handleChangeAxisB = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    setLabelFilterB(selectedIndex);
+    setLabelAtas(dataTahun.row[selectedIndex]);
+  };
+
+  const labels = dataTahun.value.map(
+    (item) => item[Object.keys(item)[labelFilter]]
+  );
+  const dataChart = dataTahun.value;
+
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  const datasetOptions = {
+    backgroundColor:
+      chartType === 'Pie'
+        ? dataChart.map(() => getRandomColor())
+        : getRandomColor(),
+    borderColor:
+      chartType === 'Pie'
+        ? dataChart.map(() => getRandomColor())
+        : getRandomColor(),
+    borderWidth: 1,
+  };
+
+  const showChart = {
+    labels: labels.slice(1), // Group Column bawah kepinggir (Axis 1)
+    datasets: [
+      {
+        label: labelAtas,
+        data: dataChart.map((item) => Object.values(item)[labelFilterB]),
+        ...datasetOptions,
+      },
+    ],
+  };
+
+  const optionsChart = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+        },
+      },
+      title: {
+        display: true,
+        text: dataTahun.judul,
+        font: {
+          size: 18,
+          weight: 'bold',
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 12,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 12,
+          },
+          beginAtZero: true,
+        },
+      },
+    },
   };
 
   return (
@@ -417,31 +542,37 @@ const Tahun = () => {
                   </div>
                 </div>
                 <div>
-                  <DataTable
-                    pagination
-                    responsive
-                    columns={columns}
-                    data={filteredData}
-                    highlightOnHover
-                    customStyles={{
-                      table: {
-                        style: {
-                          backgroundColor: '#F7FAFC',
-                        },
-                      },
-                      rows: {
-                        style: {
-                          hover: 'rgba(0,0,0,.08)',
-                          minHeight: '72px',
-                        },
-                      },
-                      headRow: {
-                        style: {
-                          backgroundColor: '#EDF2F7',
-                        },
-                      },
-                    }}
-                  />
+                  {filteredData ? (
+                    <Suspense fallback={<p>Loading table...</p>}>
+                      <DataTable
+                        pagination
+                        responsive
+                        columns={columns}
+                        data={filteredData}
+                        highlightOnHover
+                        customStyles={{
+                          table: {
+                            style: {
+                              backgroundColor: '#F7FAFC',
+                            },
+                          },
+                          rows: {
+                            style: {
+                              hover: 'rgba(0,0,0,.08)',
+                              minHeight: '72px',
+                            },
+                          },
+                          headRow: {
+                            style: {
+                              backgroundColor: '#EDF2F7',
+                            },
+                          },
+                        }}
+                      />
+                    </Suspense>
+                  ) : (
+                    <p>Loading table...</p>
+                  )}
                 </div>
               </div>
             )}
@@ -451,6 +582,71 @@ const Tahun = () => {
             {activeTabTable === 'grafik' && (
               <div className="prose lg:prose-xl text-base">
                 <h2 className="mb-4  font-bold">Grafik</h2>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="col-span-2 ">
+                    <ChartComponent options={optionsChart} data={showChart} />
+                  </div>
+                  <div className="rounded border px-5">
+                    <p>Sesuaikan Tampilan Grafik</p>
+                    <label
+                      htmlFor="typechart"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Gaya Grafik
+                    </label>
+                    <select
+                      id="typechart"
+                      onChange={handleChangeChartType}
+                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    >
+                      <option selected>--- PILIH ---</option>
+                      <option value="Bar">Bar Chart</option>
+                      <option value="Line">Line Chart</option>
+                      <option value="Pie">Pie Chart</option>
+                    </select>
+                    <label
+                      htmlFor="axisa"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Axis A
+                    </label>
+                    <select
+                      id="axisa"
+                      onChange={handleChangeAxisA}
+                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    >
+                      <option selected>--- PILIH ---</option>
+                      {dataTahun.row.map((item, index) => (
+                        <option key={index} value={index}>
+                          {item
+                            .replace(/_/g, ' ')
+                            .replace(/\b\w/g, (match) => match.toUpperCase())}
+                        </option>
+                      ))}
+                    </select>
+
+                    <label
+                      htmlFor="axisb"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Axis B
+                    </label>
+                    <select
+                      id="axisa"
+                      onChange={handleChangeAxisB}
+                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    >
+                      <option selected>--- PILIH ---</option>
+                      {dataTahun.row.map((item, index) => (
+                        <option key={index} value={index}>
+                          {item
+                            .replace(/_/g, ' ')
+                            .replace(/\b\w/g, (match) => match.toUpperCase())}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
             )}
           </div>
