@@ -18,6 +18,9 @@ module.exports = withBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['127.0.0.1'],
+  },
   async rewrites() {
     return [
       {

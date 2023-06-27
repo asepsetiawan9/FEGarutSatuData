@@ -2,11 +2,23 @@
 import { useState } from 'react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
-import artikelData from './dummy.json';
+interface HighlightItem {
+  data_terkait: {
+    gambar: string;
+    name?: string;
+    judul?: string;
+    created_at: string;
+  };
+  kategori: string;
+}
 
-export default function Artikel() {
+interface ArtikelProps {
+  highlight: HighlightItem[];
+}
+
+export default function Artikel({ highlight }: ArtikelProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const dataLength = artikelData.length;
+  const dataLength = highlight.length;
 
   const handlePrev = () => {
     setActiveIndex(
@@ -51,26 +63,45 @@ export default function Artikel() {
       </div>
       <div className="carousel-container overflow-x-auto whitespace-nowrap">
         <div className="carousel-wrapper flex gap-x-3">
-          {artikelData
-            .slice(activeIndex, activeIndex + 3)
-            .map((item, index) => (
-              <div key={index} className="flex w-full flex-col gap-1">
-                <div className="flex w-full flex-col gap-1">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-[180px] max-w-full rounded-md object-cover"
-                  />
-                  <div className="text-base font-bold">{item.title}</div>
-                  <div className="flex place-items-center gap-4">
-                    <span className="rounded-md bg-yellow-400 px-3 py-1 text-xs font-bold">
-                      {item.category}
-                    </span>
-                    <span className="text-xs text-[#ACACAC]">{item.date}</span>
-                  </div>
+          {highlight.slice(activeIndex, activeIndex + 3).map((item, index) => (
+            <div key={index} className="flex w-full flex-col gap-1">
+              <div className="flex w-full flex-col gap-1">
+                <img
+                  src={item.data_terkait.gambar}
+                  alt={item.data_terkait.name || item.data_terkait.judul}
+                  className="h-[180px] max-w-full rounded-md border object-cover"
+                />
+
+                <div className="text-base font-bold">
+                  {item.data_terkait.name || item.data_terkait.judul}
+                </div>
+                <div className="flex place-items-center gap-4">
+                  <span
+                    className={`rounded-md px-3 py-1 text-xs font-bold ${
+                      item.kategori === 'blog'
+                        ? 'bg-blue-400'
+                        : item.kategori === 'infografis'
+                        ? 'bg-yellow-400'
+                        : 'bg-green-400'
+                    }`}
+                  >
+                    {item.kategori}
+                  </span>
+
+                  <span className="text-xs text-[#ACACAC]">
+                    {new Date(item.data_terkait.created_at).toLocaleDateString(
+                      'id-ID',
+                      {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      }
+                    )}
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
 

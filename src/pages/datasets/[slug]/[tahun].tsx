@@ -210,6 +210,12 @@ const Tahun = () => {
   const [labelFilterB, setLabelFilterB] = useState('index');
   const [labelAtas, setLabelAtas] = useState('');
   const [chartType, setChartType] = useState('Line');
+  const [axisBList, setAxisBList] = useState([]);
+
+  const handleAddSeries = () => {
+    const newAxisBList = [...axisBList, axisBList.length]; // Add a new index to the list
+    setAxisBList(newAxisBList);
+  };
 
   const ChartComponent =
     chartType === 'Bar' ? Bar : chartType === 'Line' ? Line : Pie;
@@ -258,6 +264,11 @@ const Tahun = () => {
   const showChart = {
     labels: labels.slice(1), // Group Column bawah kepinggir (Axis 1)
     datasets: [
+      {
+        label: labelAtas,
+        data: dataChart.map((item) => Object.values(item)[labelFilterB]),
+        ...datasetOptions,
+      },
       {
         label: labelAtas,
         data: dataChart.map((item) => Object.values(item)[labelFilterB]),
@@ -645,6 +656,32 @@ const Tahun = () => {
                         </option>
                       ))}
                     </select>
+                    <label
+                      htmlFor="axisb"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Axis B
+                    </label>
+                    {axisBList.map((axisBIndex) => (
+                      <select
+                        key={axisBIndex}
+                        id={`axisb-${axisBIndex}`}
+                        onChange={handleChangeAxisB}
+                        className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                      >
+                        <option selected>--- PILIH ---</option>
+                        {dataTahun.row.map((item, index) => (
+                          <option key={index} value={index}>
+                            {item
+                              .replace(/_/g, ' ')
+                              .replace(/\b\w/g, (match) => match.toUpperCase())}
+                          </option>
+                        ))}
+                      </select>
+                    ))}
+                    <div className="flex justify-end">
+                      <button onClick={handleAddSeries}>Tambah Series</button>
+                    </div>
                   </div>
                 </div>
               </div>

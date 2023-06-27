@@ -1,7 +1,14 @@
 import CountUp from 'react-countup';
 import { FiArrowRight } from 'react-icons/fi';
 
-export default function Counter() {
+type CounterData = {
+  dataset: number;
+  opd: number;
+  visualisasi: number;
+  infografis: number;
+};
+
+export default function Counter({ data }: { data: CounterData }) {
   return (
     <div className="flex flex-col gap-5 ">
       <div className="flex flex-col items-center gap-3 text-center text-xl font-bold">
@@ -11,13 +18,13 @@ export default function Counter() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center gap-5 md:flex-row md:justify-between">
-        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md md:w-auto">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
             className="text-3xl font-bold"
             start={0}
-            end={312}
-            duration={2.5}
+            end={data?.dataset}
+            duration={5}
             separator=","
           />
           <div className="text-base font-bold">Total Dataset</div>
@@ -31,12 +38,12 @@ export default function Counter() {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md md:w-auto">
+        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
             className="text-3xl font-bold"
             start={0}
-            end={312}
-            duration={2.5}
+            end={data?.opd}
+            duration={5}
             separator=","
           />
           <div className="text-base font-bold">Total Organisasi</div>
@@ -51,17 +58,37 @@ export default function Counter() {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md md:w-auto">
+        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
             className="text-3xl font-bold"
             start={0}
-            end={312}
-            duration={2.5}
+            end={data?.visualisasi}
+            duration={5}
             separator=","
           />
           <div className="text-base font-bold">Total Visualisasi</div>
           <div className="flex-1 text-sm">
             Gambaran Informasi data tertentu dalam bentuk visual.
+          </div>
+          <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
+            <span className="hover:text-white">Lihat selengkapnya</span>
+            <div className="self-center">
+              <FiArrowRight />
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
+          <CountUp
+            className="text-3xl font-bold"
+            start={0}
+            end={data?.infografis}
+            duration={5}
+            separator=","
+          />
+          <div className="text-base font-bold">Total Infografik</div>
+          <div className="flex-1 text-sm">
+            Informasi yang akan disajikan dalam bentuk grafik yang akan
+            mempermudah memahami data.
           </div>
           <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
             <span className="hover:text-white">Lihat selengkapnya</span>

@@ -2,9 +2,46 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-export default function Slide() {
+import http from '../../helpers/http';
+
+interface DatasetItem {
+  id: number;
+  judul: string;
+}
+
+interface VisualisasiItem {
+  id: number;
+  judul: string;
+}
+
+interface InfografisItem {
+  id: number;
+  judul: string;
+}
+
+interface GrupItem {
+  id: number;
+  judul: string;
+}
+
+interface SearchResultItem {
+  id: number;
+  judul: string;
+  dataset?: DatasetItem[];
+  visualisasi?: VisualisasiItem[];
+  infografis?: InfografisItem[];
+  grup?: GrupItem[];
+}
+
+interface SlideProps {
+  sliderData: SliderDataItem[];
+}
+
+export default function Slide({ sliderData }: SlideProps) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
 
   const CarouselData = [
     {
@@ -26,16 +63,13 @@ export default function Slide() {
   ];
 
   const handleNext = () => {
-    setActiveIndex(
-      activeIndex === CarouselData.length - 1 ? 0 : activeIndex + 1
+    setActiveIndex((prevIndex) =>
+      prevIndex === (sliderData?.length || CarouselData.length) - 1
+        ? 0
+        : prevIndex + 1
     );
   };
 
-  // const handlePrev = () => {
-  //   setActiveIndex(
-  //     activeIndex === 0 ? CarouselData.length - 1 : activeIndex - 1
-  //   );
-  // };
   useEffect(() => {
     const intervalId = setInterval(() => {
       handleNext();
@@ -43,9 +77,30 @@ export default function Slide() {
     return () => clearInterval(intervalId);
   }, [activeIndex]);
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const fetchData = async (query: string) => {
+    try {
+      const response = await http().get('/pencarian', {
+        params: {
+          search: query,
+        },
+      });
+      setSearchResults(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(searchQuery);
+  }, [searchQuery]);
+
   return (
     <>
-      <div className="w-full">
+      <div className="w-full p-4 md:p-0">
         <div className="text-base font-bold text-[#fa65b1]">
           PORTAL SATU DATA
         </div>
@@ -83,6 +138,8 @@ export default function Slide() {
             id="search"
             className="block w-full rounded-lg border border-gray-500 bg-gray-50 p-1.5 pl-10 text-sm text-gray-900 focus:outline-[#fa65b1]"
             placeholder="Cari Data Disini ..."
+            value={searchQuery}
+            onChange={handleSearch}
           />
         </div>
 
@@ -98,20 +155,88 @@ export default function Slide() {
             className="flex h-full w-full transition-all duration-500 ease-in-out"
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
-            {CarouselData.map((item, index) => (
-              <div key={index} className="h-full w-full flex-none">
-                <Image
-                  src={item.image}
-                  alt={item.alt}
-                  width={400}
-                  height={100}
-                  layout="responsive"
-                />
-              </div>
-            ))}
+            {sliderData && sliderData.length > 0
+              ? sliderData.map((item, index) => (
+                  <div key={index} className="h-full w-full flex-none pl-3">
+                    <Image
+                      className="rounded-lg"
+                      src={item.gambar}
+                      alt={item.judul}
+                      width={400}
+                      height={200}
+                      layout="responsive"
+                    />
+                  </div>
+                ))
+              : CarouselData.map((item, index) => (
+                  <div key={index} className="h-full w-full flex-none">
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      width={400}
+                      height={100}
+                      layout="responsive"
+                    />
+                  </div>
+                ))}
           </div>
         </div>
       </div>
+
+      {searchResults.length > 0 && (
+        <div>
+          <h2>Search Results:</h2>
+          {searchResults.map((item) => (
+            <div key={item.id}>
+              <h3>{item.judul}</h3>
+              {/* Tampilkan dataset jika ada */}
+              {item.dataset && item.dataset.length > 0 && (
+                <div>
+                  <h4>Dataset:</h4>
+                  <ul>
+                    {item.dataset.map((datasetItem) => (
+                      <li key={datasetItem.id}>{datasetItem.judul}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {/* Tampilkan visualisasi jika ada */}
+              {item.visualisasi && item.visualisasi.length > 0 && (
+                <div>
+                  <h4>Visualisasi:</h4>
+                  <ul>
+                    {item.visualisasi.map((visualisasiItem) => (
+                      <li key={visualisasiItem.id}>{visualisasiItem.judul}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {/* Tampilkan infografis jika ada */}
+              {item.infografis && item.infografis.length > 0 && (
+                <div>
+                  <h4>Infografis:</h4>
+                  <ul>
+                    {item.infografis.map((infografisItem) => (
+                      <li key={infografisItem.id}>{infografisItem.judul}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {/* Tampilkan grup jika ada */}
+              {item.grup && item.grup.length > 0 && (
+                <div>
+                  <h4>Grup:</h4>
+                  <ul>
+                    {item.grup.map((grupItem) => (
+                      <li key={grupItem.id}>{grupItem.judul}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
