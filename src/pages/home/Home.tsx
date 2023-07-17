@@ -18,7 +18,7 @@ export default function Home() {
         const response = await http().get('/count');
         setData(response.data);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
 
@@ -27,7 +27,7 @@ export default function Home() {
         const response = await http().get('/highlight');
         setHighlight(response.data.data);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
 
@@ -36,7 +36,7 @@ export default function Home() {
         const response = await http().get('/slider');
         setSliderData(response.data.data);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
 

@@ -174,14 +174,10 @@ export default function Sidebar() {
                   />
                 </svg>
 
-                <span
-                  className="ml-3 flex-1 whitespace-nowrap text-left"
-                  sidebar-toggle-item
-                >
+                <span className="ml-3 flex-1 whitespace-nowrap text-left">
                   Fitur Lainnya
                 </span>
                 <svg
-                  sidebar-toggle-item
                   className="h-6 w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
