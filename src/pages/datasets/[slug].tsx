@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable tailwindcss/no-custom-classname */
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import type { Key } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaClipboardList,
   FaElementor,
@@ -15,23 +18,90 @@ import {
 import { FiCalendar, FiClock, FiEye, FiGrid, FiUser } from 'react-icons/fi';
 
 import BreadcrumbsWrapper from '@/components/Breadcrumbs';
+import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-import data from './dummydetail.json';
-import daftarData from './dummylistdata.json';
+// import data from './dummydetail.json';
 
-const Slug = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const router = useRouter();
-  const [dataDetail] = useState(data);
+type YourDataType = {
+  data: any;
+  id: Key | null | undefined;
+  updated_at: string | number | Date;
+  created_at: string | number | Date;
+  date_upload: string;
+  count_view: string;
+  judul: any;
+  slug: string;
+  range_years: string;
+  jumlah_data: number;
+  deskripsi: string;
+  opd: {
+    name: string;
+  };
+  grup: {
+    name: string;
+  };
+};
+
+const Slug = ({ data }: { data: YourDataType }) => {
+  const [rekomendasiData, setRekomendasiData] = useState<YourDataType[]>([]);
+
   const [activeTab, setActiveTab] = useState('deskripsi');
+  const [dataDetail] = useState(data);
+  const router = useRouter();
 
   const { slug } = router.query;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res2 = await http().get('/datasets/rekomendasi');
+        const { data: rekomendasi } = res2.data;
+
+        // Set the fetched data in the state
+        setRekomendasiData(rekomendasi);
+      } catch (error) {
+        // console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [data.slug]);
 
   const handleTabClick = (tabName: React.SetStateAction<string>) => {
     setActiveTab(tabName);
   };
+  const RangeYearsComponent = ({ item }: { item: YourDataType }) => {
+    const truncatedText = `${item.range_years} (${item.jumlah_data})`;
+
+    return <span>{truncatedText}</span>;
+  };
+
+  const DescriptionComponent = ({ item }: { item: YourDataType }) => {
+    const cleanedDescription = item.deskripsi.replace(/_x000D_/g, '');
+
+    return (
+      <div
+        className="!my-1 text-base"
+        dangerouslySetInnerHTML={{ __html: cleanedDescription }}
+      />
+    );
+  };
+  const formatDate = (dateString: string | number | Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    };
+
+    const date = new Date(dateString);
+    const formattedDate = new Intl.DateTimeFormat('id-ID', options).format(
+      date
+    );
+    return formattedDate;
+  };
+
   return (
     <Main
       meta={
@@ -49,28 +119,29 @@ const Slug = () => {
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiUser className="mt-1" />
-                {dataDetail.opd}
+                {dataDetail.opd.name || ''}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiGrid className="mt-1" />
-                {dataDetail.sektoral}
+                {dataDetail.grup.name || ''}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiCalendar className="mt-1" />
-                2020-2022 (3)
+                <RangeYearsComponent item={dataDetail} />
               </div>
             </div>
             <div className="flex flex-row gap-3">
               <div className="flex flex-row gap-1">
                 {' '}
-                <FiClock className="mt-1" />5 Hari Yang Lalu
+                <FiClock className="mt-1" />
+                {dataDetail.date_upload || ''}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiEye className="mt-1" />
-                90
+                {dataDetail.count_view || ''}
               </div>
             </div>
           </div>
@@ -116,115 +187,160 @@ const Slug = () => {
             </div>
           </div>
         </div>
-      </BreadcrumbsWrapper>
-      <div className="py-4 pb-6">
-        {activeTab === 'deskripsi' && (
-          <div className="prose lg:prose-xl text-base">
-            <h2 className="mb-4  font-bold">Deskripsi</h2>
-            <div>
-              <p>
-                Dataset ini berisi data jumlah pegawai negeri sipil (PNS) yang
-                mengikuti Pendidikan dan Pelatihan di kabupaten Garut Tahun
-                2016-2022
-              </p>
-              <p>
-                Penjelasan mengenai variabel di dalam Dataset ini sebagai
-                berikut:
-              </p>
-              <ul>
-                <li>Tahun : menyatakan tahun masehi</li>
-                <li>
-                  Pelatihan Kepemimpinan Nasional (PKN): pelatihan struktural
-                  kepemimpinan pratama yang diikuti oleh Pegawai Negeri Sipil
-                  yang menduduki JPT Pratama atau yang telah memenuhi
-                  persyaratan dokumen sesuai dengan ketentuan yang berlaku.
-                </li>
-                <li>
-                  Pelatihan Kepemimpinan Administrator (PKA): pelatihan
-                  struktural kepemimpinan administrator sebagaimana diatur dalam
-                  peraturan pemerintah yang mengatur mengenai manajemen pegawai
-                  negeri sipil, yang bertujuan untuk mengembangkan Kompetensi
-                  Peserta dalam rangka memenuhi standar Kompetensi manajerial
-                  Jabatan Administrator.
-                </li>
-                <li>
-                  Pelatihan Kepemimpinan Pengawas (PKP): pelatihan struktural
-                  kepemimpinan pengawas sebagaimana diatur dalam peraturan
-                  pemerintah yang mengatur mengenai manajemen pegawai negeri
-                  sipil, yang bertujuan untuk mengembangkan Kompetensi Peserta
-                  dalam rangka memenuhi standar Kompetensi manajerial Jabatan
-                  Pengawas.
-                </li>
-              </ul>
-            </div>
-          </div>
-        )}
 
-        {activeTab === 'metadata' && (
-          <div>
-            <h2 className="mb-4 text-base font-bold">Metadata</h2>
-            <table className="w-full border text-left text-base">
-              <tr>
-                <th className="border font-medium">
-                  <div className="m-2 ">
-                    <span className="rounded bg-green-400 px-3 py-1 text-sm">
-                      Dibuat:
-                    </span>
-                  </div>
-                </th>
-                <td className="border ">
-                  <div className="mx-2">{dataDetail.metadata_dibuat}</div>
-                </td>
-              </tr>
-              <tr>
-                <th className="border font-medium">
-                  <div className="m-2 ">
-                    <span className="rounded bg-yellow-400 px-3 py-1 text-sm">
-                      Diubah:
-                    </span>
-                  </div>
-                </th>
-                <td className="border">
-                  <div className="mx-2">{dataDetail.metadata_diedit}</div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* daftar data */}
-      <div className="pb-2 text-base font-bold">Daftar Data</div>
-      <div className="flex flex-col gap-2 text-base">
-        {daftarData.map((dafData) => (
-          <Link href={`/datasets/${slug}/${dafData.tahun}`}>
-            <div key={data.id} className="flex flex-row justify-between">
+        <div className="py-4 pb-6">
+          {activeTab === 'deskripsi' && (
+            <div className="prose lg:prose-xl text-base">
+              <h2 className="mb-4  font-bold">Deskripsi</h2>
               <div>
-                {dafData.judul} - Tahun {dafData.tahun}
-              </div>
-              <div className="flex flex-row gap-2">
-                <div className="flex flex-row gap-1 !text-sm">
-                  <FiCalendar className="mt-1" /> {dafData.waktu}
-                </div>
-                <div className="flex flex-row gap-1 !text-sm">
-                  <FiEye className="mt-1" /> 10
-                </div>
+                <DescriptionComponent item={dataDetail} />
               </div>
             </div>
-            <div className="mx-2 border-b-2 pt-2"></div>
-          </Link>
-        ))}
-      </div>
-      <div className="pb-2 pt-5 text-base font-bold">Rekomendasi Dataset</div>
-      <div className="flex flex-col gap-2 text-base">
-        <div>
-          Jumlah Penduduk Berdasarkan Usia Per Kecamatan di Kabupaten Garut
+          )}
+
+          {activeTab === 'metadata' && (
+            <div>
+              <h2 className="mb-4 text-base font-bold">Metadata</h2>
+              <table className="w-full border text-left text-base">
+                <tr>
+                  <th className="border font-medium">
+                    <div className="m-2 ">
+                      <span className="rounded bg-green-400 px-3 py-1 text-sm">
+                        Dibuat:
+                      </span>
+                    </div>
+                  </th>
+                  <td className="border ">
+                    <div className="mx-2">
+                      {formatDate(dataDetail.created_at)}
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border font-medium">
+                    <div className="m-2 ">
+                      <span className="rounded bg-yellow-400 px-3 py-1 text-sm">
+                        Diubah:
+                      </span>
+                    </div>
+                  </th>
+                  <td className="border">
+                    <div className="mx-2">
+                      {formatDate(dataDetail.updated_at)}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          )}
         </div>
-        <div>Jumlah PNS di Kabupaten Garut</div>
-        <div>Ketersediaan Pangan di Kabupaten Garut</div>
-      </div>
+
+        {/* daftar data */}
+        <div className="pb-2 text-base font-bold">Daftar Data</div>
+        <div className="flex flex-col gap-2 text-base">
+          {dataDetail.data.map(
+            (dafData: {
+              tahun: any;
+              nama:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    | string
+                    | React /* eslint-disable tailwindcss/no-custom-classname */.JSXElementConstructor<any>
+                  >
+                | React.ReactFragment
+                | React.ReactPortal
+                | null
+                | undefined;
+              tanggal_input:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    | string
+                    | React /* eslint-disable tailwindcss/no-custom-classname */.JSXElementConstructor<any>
+                  >
+                | React.ReactFragment
+                | React.ReactPortal
+                | null
+                | undefined;
+              count_view:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    | string
+                    | React /* eslint-disable tailwindcss/no-custom-classname */.JSXElementConstructor<any>
+                  >
+                | React.ReactFragment
+                | React.ReactPortal
+                | null
+                | undefined;
+            }) => (
+              <Link key={data.id} href={`/datasets/${slug}/${dafData.tahun}`}>
+                <div className="flex flex-row justify-between">
+                  <div>{dafData.nama}</div>
+                  <div className="flex flex-row gap-2">
+                    <div className="flex flex-row gap-1 !text-sm">
+                      <FiCalendar className="mt-1" /> {dafData.tanggal_input}
+                    </div>
+                    <div className="flex flex-row gap-1 !text-sm">
+                      <FiEye className="mt-1" /> {dafData.count_view}
+                    </div>
+                  </div>
+                </div>
+                <div className="mx-2 border-b-2 pt-2"></div>
+              </Link>
+            )
+          )}
+        </div>
+        <div className="pb-2 pt-5 text-base font-bold">Rekomendasi Dataset</div>
+        <div className="flex flex-col gap-2 text-base">
+          {rekomendasiData &&
+            rekomendasiData.map(
+              (item: {
+                id: Key | null | undefined;
+                judul:
+                  | string
+                  | number
+                  | boolean
+                  | React.ReactElement<
+                      any /* eslint-disable react-hooks/rules-of-hooks */,
+                      /* eslint-disable tailwindcss/no-custom-classname */
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | React.ReactFragment
+                  | React.ReactPortal
+                  | null
+                  | undefined;
+              }) => (
+                <div key={item.id}>
+                  {/* Display the rekomendasi data here */}
+                  {item.judul}
+                </div>
+              )
+            )}
+        </div>
+      </BreadcrumbsWrapper>
     </Main>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+}: GetServerSidePropsContext) => {
+  const { slug } = params as { slug: string };
+  // Fetch data from your backend API using the 'slug'
+  const res = await http().get(`datasets/${slug}`);
+  const { data } = res.data;
+
+  return {
+    props: { data },
+  };
 };
 
 export default Slug;
