@@ -22,6 +22,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import jsPDF from 'jspdf';
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { Suspense, useEffect, useState } from 'react';
@@ -53,6 +54,7 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 
 import BreadcrumbsWrapper from '@/components/Breadcrumbs';
+import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
@@ -70,9 +72,9 @@ ChartJS.register(
   Legend
 );
 
-const Tahun = () => {
+const Tahun = ({ data }) => {
   const router = useRouter();
-  // console.log(router.asPath);
+  console.log(data);
   const DataTable = dynamic(() => import('react-data-table-component'), {
     ssr: false,
   });
@@ -178,7 +180,7 @@ const Tahun = () => {
               onClick={handlePDFDownload}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200"
             >
-              <CSVLink dataBind={csv} filename={`dataBind-tahun-${tahun}.csv`}>
+              <CSVLink data={csv} filename={`dataBind-tahun-${tahun}.csv`}>
                 <FaFileCsv
                   className="text-2xl 
           text-green-400"
@@ -696,18 +698,21 @@ const Tahun = () => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({
-//   params,
-// }: GetServerSidePropsContext) => {
-//   const { slug } = params as { slug: string };
-//   // Fetch dataBind from your backend API using the 'slug'
-//   const res = await http().get(`dataBind/${slug}`);
-//   const { dataBind } = res.dataBind;
-//   console.log(dataBind);
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+}: GetServerSidePropsContext) => {
+  const { slugData } = params as { slugData: string };
 
-//   return {
-//     props: { dataBind },
-//   };
-// };
+  // Fetch dataBind from your backend API using the 'slug'
+  const res = await http().get(`data/${slugData}`);
+  // console.log(res);
+
+  const { data } = res.data;
+  // console.log(data);
+
+  return {
+    props: { data },
+  };
+};
 
 export default Tahun;

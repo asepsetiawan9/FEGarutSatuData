@@ -1,0 +1,61 @@
+{
+  "id": 1,
+  "tahun": 2012,
+  "image": "https://dummyimage.com/400x400/FF5733/ffffff&text=",
+  "opd": "Dinas Komunikasi dan Informatika",
+  "sektoral": "sektoral 1",
+  "description": "Dataset ini berisi data tentang Jumlah Terminal yang ada di Kabupaten Garut",
+  "slug": "Jumlah-Menara-Base-Transceiver-Station-(BTS)-di-Kabupaten-Garut",
+  "judul": "Jumlah Menara Base Transceiver Station (BTS) di Kabupaten Garut",
+  "tlp": "(0262) 578149",
+  "alamat": "Jl. ABC no 01, Tarogong Kidul, Garut, 44162",
+  "website": "http://www.bkd.jabarprov.go.id/",
+  "email": "bkd@jabarprov.go.id",
+  "metadata_dibuat": "09 Mei 2022 12:00",
+  "metadata_diedit": "09 Mei 2022 12:00",
+  "metadata_id": 1,
+  "metadata_keg": "Kompilasi Data Sektoral Dinas Perhubungan Tahun 2022",
+  "metadata_var": "Jumlah Terminal di Kabupaten Garut",
+  "metadata_ind": "-",
+  "standar_data": [
+    {
+      "konsep": "Nama",
+      "definisi": "Lorem Ipsum Dolor",
+      "klasifikasi": "-",
+      "satuan": "-",
+      "ukuran": "-"
+    },
+    {
+      "konsep": "Alamat",
+      "definisi": "Lorem Ipsum Dolor",
+      "klasifikasi": "-",
+      "satuan": "-",
+      "ukuran": "-"
+    },
+    {
+      "konsep": "Tipe",
+      "definisi": "Lorem Ipsum Dolor",
+      "klasifikasi": "-",
+      "satuan": "-",
+      "ukuran": "-"
+    }
+  ],
+  "row": ["pangkat_atau_golongan", "laki_laki", "perempuan"],
+  "value": [
+    { "pangkat_atau_golongan": "I/b", "laki_laki": 23, "perempuan": null },
+    { "pangkat_atau_golongan": "I/c", "laki_laki": 13, "perempuan": null },
+    { "pangkat_atau_golongan": "I/d", "laki_laki": 56, "perempuan": 1 },
+    { "pangkat_atau_golongan": "II/a", "laki_laki": 92, "perempuan": 13 },
+    { "pangkat_atau_golongan": "II/b", "laki_laki": 282, "perempuan": 41 },
+    { "pangkat_atau_golongan": "II/c", "laki_laki": 455, "perempuan": 320 },
+    { "pangkat_atau_golongan": "II/d", "laki_laki": 392, "perempuan": 106 },
+    { "pangkat_atau_golongan": "III/a", "laki_laki": 569, "perempuan": 528 },
+    { "pangkat_atau_golongan": "III/b", "laki_laki": 916, "perempuan": 987 },
+    { "pangkat_atau_golongan": "III/c", "laki_laki": 764, "perempuan": 861 },
+    { "pangkat_atau_golongan": "III/d", "laki_laki": 729, "perempuan": 779 },
+    { "pangkat_atau_golongan": "IV/a", "laki_laki": 851, "perempuan": 1058 },
+    { "pangkat_atau_golongan": "IV/b", "laki_laki": 1587, "perempuan": 2416 },
+    { "pangkat_atau_golongan": "IV/c", "laki_laki": 70, "perempuan": 36 },
+    { "pangkat_atau_golongan": "IV/d", "laki_laki": 3, "perempuan": null }
+  ]
+}

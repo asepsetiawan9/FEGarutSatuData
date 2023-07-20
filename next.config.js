@@ -51,6 +51,14 @@ const nextConfig = {
         source: '/datasets', // mau diganti jadi apa ?
         destination: '/datasets/Index', // path lama ?
       },
+      // {
+      //   source: '/datasets/:slug',
+      //   destination: '/datasets/[slug]',
+      // },
+      // {
+      //   source: '/datasets/:slug/:DataSlug', // Pola dinamis untuk DataSlug
+      //   destination: '/datasets/[slug]/[DataSlug]', // Nama file yang sesuai
+      // },
     ];
   },
   // async redirects() {
