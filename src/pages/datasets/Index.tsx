@@ -317,7 +317,7 @@ const Index = () => {
 
                 <a
                   key={item.id}
-                  className="no-underline decoration-black hover:no-underline"
+                  className="cursor-pointer no-underline decoration-black hover:no-underline"
                   onClick={() => handleClickDataset(item.slug)}
                 >
                   <div className="grid grid-cols-5 md:gap-4">

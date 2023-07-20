@@ -10,7 +10,7 @@
 }
 
 .content ul {
-  @apply my-6;
+  @apply mt-3;
 }
 
 .carousel-container {

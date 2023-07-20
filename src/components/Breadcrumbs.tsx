@@ -18,7 +18,7 @@ function Breadcrumbs({ router }: BreadcrumbsProps) {
     >
       {folderName && (
         <Link href={`/${folderName}`}>
-          {folderName.charAt(0).toUpperCase() + folderName.slice(1)} <>&nbsp;</>
+          {folderName.replace(/_/g, ' ')} <>&nbsp;</>
         </Link>
       )}
     </div>
@@ -26,10 +26,13 @@ function Breadcrumbs({ router }: BreadcrumbsProps) {
   const { slug, tahun } = router.query;
 
   if (slug) {
-    const formattedSlug = slug.toString().replace(/-/g, ' ');
+    const formattedSlug = slug
+      .toString()
+      .replace(/_\d+$/, '')
+      .replace(/_/g, ' ');
     breadcrumbItems.push(
       <div key="slug" className="breadcrumb-item text-base hover:no-underline">
-        <Link href={`/${folderName}/${formattedSlug}`}>
+        <Link href={`/${folderName}/${slug}`}>
           {formattedSlug} <>&nbsp;</>
         </Link>
       </div>
