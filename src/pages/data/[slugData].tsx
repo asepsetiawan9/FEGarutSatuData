@@ -1,11 +1,4 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable tailwindcss/no-custom-classname */
-/* eslint-disable new-cap */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable unused-imports/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable react/jsx-key */
 import 'jspdf-autotable';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -21,31 +14,25 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import jsPDF from 'jspdf';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-import { CSVLink } from 'react-csv';
 import {
   BsFileEarmarkCodeFill,
-  BsFiletypeJson,
   BsFillClipboard2CheckFill,
 } from 'react-icons/bs';
 import {
   FaChartPie,
   FaClipboardList,
   FaFacebookSquare,
-  FaFileCsv,
-  FaFilePdf,
   FaLink,
   FaTable,
   FaTwitterSquare,
   FaWhatsappSquare,
 } from 'react-icons/fa';
 import { FiCalendar, FiClock, FiEye, FiGrid, FiUser } from 'react-icons/fi';
-import { VscJson } from 'react-icons/vsc';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -58,7 +45,11 @@ import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
+import DownloadComponent from './DownloadComponent';
 import dataTahun from './dummytahun.json';
+import ModalMsInd from './ModalMsInd';
+import ModalMsKeg from './ModalMsKeg';
+import ModalMsVar from './ModalMsVar';
 
 ChartJS.register(
   CategoryScale,
@@ -71,10 +62,50 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+interface YourDataType {
+  // Define the properties of the data object here
+  // For example:
+  id: number;
+  name: string;
+  // Add more properties as needed
+}
 
-const Tahun = ({ data }) => {
+interface TahunProps {
+  data: YourDataType[];
+}
+
+const Tahun: React.FC<TahunProps> = ({ data }) => {
   const router = useRouter();
-  console.log(data);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalVarOpen, setIsModalVarOpen] = useState(false);
+  const [isModalIndOpen, setIsModalIndOpen] = useState(false);
+
+  // Function to handle the click event and show the modal
+  const handleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleClickVar = () => {
+    setIsModalVarOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModalVar = () => {
+    setIsModalVarOpen(false);
+  };
+  const handleClickInd = () => {
+    setIsModalIndOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModalInd = () => {
+    setIsModalIndOpen(false);
+  };
+  // console.log(data);
   const DataTable = dynamic(() => import('react-data-table-component'), {
     ssr: false,
   });
@@ -82,13 +113,20 @@ const Tahun = ({ data }) => {
   const [activeTab, setActiveTab] = useState('standardata');
   const [activeTabTable, setActiveTabTable] = useState('tabel');
   const [searchTerm, setSearchTerm] = useState('');
-  const [dataBind] = useState(dataTahun);
-  const [shareLink] = useState('');
-
+  // const [dataDetail] = useState(dataTahun);
+  const [dataDetail] = useState(data);
+  // const [shareLink] = useState('');
+  const [shareUrl, setShareUrl] = useState('');
+  // console.log(dataDetail.new_dataset.grup);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setShareUrl(window.location.href);
+    }
+  }, []);
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareLink);
+    navigator.clipboard.writeText(shareUrl);
     toast.success('Link telah berhasil dicopy!', {
-      position: 'bottom-right',
+      position: 'top-right',
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -107,23 +145,20 @@ const Tahun = ({ data }) => {
     setActiveTabTable(tabName);
   };
 
-  const shareUrl = `http://localhost:3000${router.asPath}`;
+  useEffect(() => {}, [slug, tahun]);
 
-  useEffect(() => {
-    // Panggil API atau lakukan operasi lain untuk mendapatkan dataBind yang sesuai dengan slug dan tahun
-    // Simpan dataBind tersebut ke dalam state dataBind
-  }, [slug, tahun]);
+  const rowTable = dataDetail.source_media[0].row;
+  const dataRowExcel = JSON.parse(rowTable);
 
-  const rowTabel = dataBind.row.filter((col) => col !== 'id');
+  const rowTabel = dataRowExcel.filter((col) => col !== 'id');
 
-  const valueTabel = dataBind.value.map((val) => {
+  const valTable = dataDetail.source_media[0].value;
+  const dataValueExcel = JSON.parse(valTable);
+
+  const valueTabel = dataValueExcel.map((val) => {
     const { id, ...rest } = val;
     return rest;
   });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
 
   function generateColumns(rowTabel: any[]) {
     return rowTabel.map((column) => ({
@@ -132,32 +167,6 @@ const Tahun = ({ data }) => {
       sortable: true,
     }));
   }
-
-  const handlePDFDownload = () => {
-    const doc = new jsPDF({
-      orientation: 'landscape',
-    });
-    doc.text(dataBind.judul || 'Data Tabel', 14, 20);
-    doc.autoTable({
-      head: [rowTabel],
-      body: filteredData.map((row) => Object.values(row)),
-      startY: 30,
-    });
-    doc.save(`dataBind-tahun-${tahun}.pdf`);
-  };
-
-  const handleJSONDownload = () => {
-    const jsonData = JSON.stringify(filteredData, null, 2);
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `dataBind-tahun-${tahun}.json`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const columns = generateColumns(rowTabel);
   const filteredData = valueTabel.filter((row) =>
     Object.values(row)
@@ -165,47 +174,10 @@ const Tahun = ({ data }) => {
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
+  // console.log(filteredData);
 
-  const handleDownload = () => {
-    const csvData = filteredData.map((row) => Object.values(row));
-    const headers = rowTabel;
-    const csv = [headers, ...csvData];
-
-    return (
-      <>
-        <div className="flex flex-row gap-3">
-          <div className="mt-1.5">Unduh Data:</div>
-          <div className="flex flex-row gap-3">
-            <div
-              onClick={handlePDFDownload}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200"
-            >
-              <CSVLink data={csv} filename={`dataBind-tahun-${tahun}.csv`}>
-                <FaFileCsv
-                  className="text-2xl 
-          text-green-400"
-                />
-              </CSVLink>
-            </div>
-            <div
-              onClick={handlePDFDownload}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200"
-            >
-              <FaFilePdf className="text-2xl text-red-500" />
-            </div>
-            <div
-              onClick={handleJSONDownload}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200"
-            >
-              <BsFiletypeJson className="text-2xl text-primary" />
-            </div>
-            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200">
-              <VscJson className="text-2xl text-[#FFC300]" />
-            </div>
-          </div>
-        </div>
-      </>
-    );
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   const [labelFilter, setLabelFilter] = useState('');
@@ -268,12 +240,12 @@ const Tahun = ({ data }) => {
     datasets: [
       {
         label: labelAtas,
-        dataBind: dataChart.map((item) => Object.values(item)[labelFilterB]),
+        dataDetail: dataChart.map((item) => Object.values(item)[labelFilterB]),
         ...datasetOptions,
       },
       {
         label: labelAtas,
-        dataBind: dataChart.map((item) => Object.values(item)[labelFilterB]),
+        dataDetail: dataChart.map((item) => Object.values(item)[labelFilterB]),
         ...datasetOptions,
       },
     ],
@@ -325,36 +297,35 @@ const Tahun = ({ data }) => {
     >
       <BreadcrumbsWrapper>
         <div className="px-4">
-          <h1 className="mb-2 font-bold">
-            {slug} - {tahun}
-          </h1>
+          <h1 className="mb-2 font-bold">{dataDetail.nama}</h1>
           <div className="flex justify-between text-sm">
             <div className="flex flex-row gap-3">
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiUser className="mt-1" />
-                {dataBind.opd}
+                {dataDetail.new_dataset.opd.name}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiGrid className="mt-1" />
-                {dataBind.sektoral}
+                {dataDetail.new_dataset.grup.name}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiCalendar className="mt-1" />
-                2020-2022 (3)
+                {dataDetail.priode}
               </div>
             </div>
             <div className="flex flex-row gap-3">
               <div className="flex flex-row gap-1">
                 {' '}
-                <FiClock className="mt-1" />5 Hari Yang Lalu
+                <FiClock className="mt-1" />
+                {dataDetail.tanggal_input}
               </div>
               <div className="flex flex-row gap-1">
                 {' '}
                 <FiEye className="mt-1" />
-                90
+                {dataDetail.count_view}
               </div>
             </div>
           </div>
@@ -425,24 +396,38 @@ const Tahun = ({ data }) => {
             {activeTab === 'standardata' && (
               <div className="prose lg:prose-xl text-base">
                 <div>
-                  <table className="w-full rounded-xl border">
-                    <tr className="border-2  text-left">
-                      <th className="border-2 p-2">Konsep</th>
-                      <th className="border-2 p-2">Definisi</th>
-                      <th className="border-2 p-2">Klasifikasi</th>
-                      <th className="border-2 p-2">Satuan</th>
-                      <th className="border-2 p-2">Ukuran</th>
-                    </tr>
-                    {dataBind.standar_data.map((dataBind) => (
-                      <tr>
-                        <td className="border-2 p-2">{dataBind.konsep}</td>
-                        <td className="border-2 p-2">{dataBind.definisi}</td>
-                        <td className="border-2 p-2">{dataBind.klasifikasi}</td>
-                        <td className="border-2 p-2">{dataBind.satuan}</td>
-                        <td className="border-2 p-2">{dataBind.ukuran}</td>
+                  {dataDetail.standar_data.length > 0 ? (
+                    <table className="w-full rounded-xl border">
+                      <tr className="border-2 text-left">
+                        <th className="border-2 p-2">Konsep</th>
+                        <th className="border-2 p-2">Definisi</th>
+                        <th className="border-2 p-2">Klasifikasi</th>
+                        <th className="border-2 p-2">Satuan</th>
+                        <th className="border-2 p-2">Ukuran</th>
                       </tr>
-                    ))}
-                  </table>
+                      {dataDetail.standar_data.map((stndrData) => (
+                        <tr key={stndrData.id}>
+                          {' '}
+                          {/* Tambahkan key dengan nilai yang unik, misalnya dataDetail.id */}
+                          <td className="border-2 p-2">{stndrData.konsep}</td>
+                          <td className="border-2 p-2">{stndrData.definisi}</td>
+                          <td className="border-2 p-2">
+                            {stndrData.klasifikasi}
+                          </td>
+                          <td className="border-2 p-2">{stndrData.satuan}</td>
+                          <td className="border-2 p-2">{stndrData.ukuran}</td>
+                        </tr>
+                      ))}
+                    </table>
+                  ) : (
+                    <table className="w-full rounded-xl border">
+                      <tr>
+                        <td className="col-span-5 border-2 p-2 text-center">
+                          Standar Data Tidak Ada
+                        </td>
+                      </tr>
+                    </table>
+                  )}
                 </div>
               </div>
             )}
@@ -455,7 +440,7 @@ const Tahun = ({ data }) => {
                       <div className="m-2 ">Tanggal Dibuat</div>
                     </th>
                     <td className=" ">
-                      <div className="mx-2">{dataBind.metadata_dibuat}</div>
+                      <div className="mx-2">{dataDetail.dibuat}</div>
                     </td>
                   </tr>
                   <tr>
@@ -463,31 +448,46 @@ const Tahun = ({ data }) => {
                       <div className="m-2 ">Tanggal Diubah</div>
                     </th>
                     <td className="">
-                      <div className="mx-2">{dataBind.metadata_diedit}</div>
+                      <div className="mx-2">{dataDetail.diubah}</div>
                     </td>
                   </tr>
                   <tr>
                     <th className="w-44  font-medium">
                       <div className="m-2 ">Metadata Kegiatan</div>
                     </th>
-                    <td className="">
-                      <div className="mx-2">{dataBind.metadata_keg}</div>
+                    <td className="cursor-pointer px-4">
+                      <div
+                        className="inline-block rounded-md bg-[#fa65b1] p-2 text-white"
+                        onClick={handleClick}
+                      >
+                        {dataDetail.ms_keg.judul}
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <th className="w-44  font-medium">
                       <div className="m-2 ">Metadata Variabel</div>
                     </th>
-                    <td className="">
-                      <div className="mx-2">{dataBind.metadata_var}</div>
+                    <td className="cursor-pointer px-4">
+                      <div
+                        className="inline-block rounded-md bg-[#fa446b] p-2 text-white"
+                        onClick={handleClickVar}
+                      >
+                        {dataDetail.ms_var.nama_variabel}
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <th className="w-44  font-medium">
                       <div className="m-2 ">Metadata Indikator</div>
                     </th>
-                    <td className="">
-                      <div className="mx-2">{dataBind.metadata_ind}</div>
+                    <td className="cursor-pointer px-4">
+                      <div
+                        className="inline-block rounded-md bg-[#e8ff16] p-2 text-black"
+                        onClick={handleClickInd}
+                      >
+                        {dataDetail.ms_ind.nama_indikator}
+                      </div>
                     </td>
                   </tr>
                 </table>
@@ -534,7 +534,11 @@ const Tahun = ({ data }) => {
                 </ul>
               </div>
               <div className="mt-8 flex flex-row gap-2 text-sm">
-                {handleDownload()}
+                <DownloadComponent
+                  dataDetail={dataDetail}
+                  filteredData={filteredData}
+                  rowTabel={rowTabel}
+                />
               </div>
             </div>
             {activeTabTable === 'tabel' && (
@@ -542,7 +546,7 @@ const Tahun = ({ data }) => {
                 {/* tabel */}
 
                 <div className="my-2 flex flex-row justify-between">
-                  <div>{dataBind.judul || 'Data Tabel'}</div>
+                  <div>{dataDetail.judul || 'Data Tabel'}</div>
                   <div className="flex gap-2 text-sm">
                     <span className="pt-1">Search :</span>
                     <input
@@ -561,7 +565,7 @@ const Tahun = ({ data }) => {
                         pagination
                         responsive
                         columns={columns}
-                        dataBind={filteredData}
+                        data={filteredData}
                         highlightOnHover
                         customStyles={{
                           table: {
@@ -599,7 +603,7 @@ const Tahun = ({ data }) => {
                   <div className="col-span-2 ">
                     <ChartComponent
                       options={optionsChart}
-                      dataBind={showChart}
+                      dataDetail={showChart}
                     />
                   </div>
                   <div className="rounded border px-5">
@@ -693,6 +697,21 @@ const Tahun = ({ data }) => {
             )}
           </div>
         </div>
+        <ModalMsKeg
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          dataDetail={dataDetail}
+        />
+        <ModalMsVar
+          isModalVarOpen={isModalVarOpen}
+          closeModalVar={closeModalVar}
+          dataDetail={dataDetail}
+        />
+        <ModalMsInd
+          isModalIndOpen={isModalIndOpen}
+          closeModalInd={closeModalInd}
+          dataDetail={dataDetail}
+        />
       </BreadcrumbsWrapper>
     </Main>
   );
@@ -703,11 +722,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   const { slugData } = params as { slugData: string };
 
-  // Fetch dataBind from your backend API using the 'slug'
+  // Fetch dataDetail from your backend API using the 'slug'
   const res = await http().get(`data/${slugData}`);
   // console.log(res);
 
-  const { data } = res.data;
+  const { data } = res.data.data;
   // console.log(data);
 
   return {
