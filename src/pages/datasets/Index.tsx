@@ -214,6 +214,7 @@ const Index = () => {
 
     setSearchResults(sortedData);
   }, [selectedFilter, data]);
+
   const handleClickDataset = (slug: any) => {
     router.push(`/datasets/${slug}`);
   };
