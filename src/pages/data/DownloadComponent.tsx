@@ -1,6 +1,6 @@
 import JsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { CSVLink } from 'react-csv';
+import dynamic from 'next/dynamic';
 import { BsFiletypeJson } from 'react-icons/bs';
 import { FaFileCsv, FaFilePdf } from 'react-icons/fa';
 import { VscJson } from 'react-icons/vsc';
@@ -24,11 +24,27 @@ const DownloadComponent: React.FC<DownloadComponentProps> = ({
   filteredData,
   rowTabel,
 }) => {
-  const csvData = filteredData.map((row) => Object.values(row));
-  const headers = rowTabel;
-  const csv = [headers, ...csvData];
   const UrlBackEnd = 'http://127.0.0.1:8000/api';
 
+  const DynamicCSVLink = dynamic(
+    () => import('react-csv').then((module) => module.CSVLink),
+    {
+      ssr: false,
+    }
+  );
+
+  const DownloadCSV = ({ data, filename }) => {
+    const headers = Object.keys(data[0]);
+    const csvContent = `${headers.join(',')}\n${data
+      .map((row) => headers.map((header) => row[header]).join(','))
+      .join('\n')}`;
+
+    return (
+      <DynamicCSVLink data={csvContent} filename={filename}>
+        <FaFileCsv className="text-2xl text-green-400" />
+      </DynamicCSVLink>
+    );
+  };
   const handlePDFDownload = () => {
     const doc = new JsPDF({
       orientation: 'landscape',
@@ -68,12 +84,15 @@ const DownloadComponent: React.FC<DownloadComponentProps> = ({
         <div className="mt-1.5">Unduh Data:</div>
         <div className="flex flex-row gap-3">
           {/* CSV Download */}
-          <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200">
-            <CSVLink data={csv} filename={`${dataDetail.nama}.csv`}>
-              <FaFileCsv className="text-2xl text-green-400" />
-            </CSVLink>
-          </div>
 
+          <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border hover:bg-gray-200">
+            {typeof window !== 'undefined' && (
+              <DownloadCSV
+                data={filteredData}
+                filename={`${dataDetail.nama}.csv`}
+              />
+            )}
+          </div>
           {/* PDF Download */}
           <div
             onClick={handlePDFDownload}

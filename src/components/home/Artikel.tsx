@@ -17,6 +17,8 @@ interface ArtikelProps {
 }
 
 export default function Artikel({ highlight }: ArtikelProps) {
+  // console.log(highlight);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const dataLength = highlight.length;
 
@@ -67,13 +69,13 @@ export default function Artikel({ highlight }: ArtikelProps) {
             <div key={index} className="flex w-full flex-col gap-1">
               <div className="flex w-full flex-col gap-1">
                 <img
-                  src={item.data_terkait.gambar}
-                  alt={item.data_terkait.name || item.data_terkait.judul}
+                  src={item.data_terkait?.gambar || '/imgdataset.png'}
+                  alt={item.data_terkait?.name || item.data_terkait?.judul}
                   className="h-[180px] max-w-full rounded-md border object-cover"
                 />
 
                 <div className="text-base font-bold">
-                  {item.data_terkait.name || item.data_terkait.judul}
+                  {item.data_terkait?.name || item.data_terkait?.judul}
                 </div>
                 <div className="flex place-items-center gap-4">
                   <span
@@ -89,7 +91,7 @@ export default function Artikel({ highlight }: ArtikelProps) {
                   </span>
 
                   <span className="text-xs text-[#ACACAC]">
-                    {new Date(item.data_terkait.created_at).toLocaleDateString(
+                    {new Date(item.data_terkait?.created_at).toLocaleDateString(
                       'id-ID',
                       {
                         day: 'numeric',

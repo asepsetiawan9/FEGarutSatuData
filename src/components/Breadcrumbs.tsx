@@ -2,7 +2,6 @@ import type { WithRouterProps } from 'next/dist/client/with-router';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 import { FiHome } from 'react-icons/fi';
 
@@ -17,34 +16,54 @@ function Breadcrumbs({ router }: BreadcrumbsProps) {
       className="breadcrumb-item text-base hover:no-underline"
     >
       {folderName && (
-        <Link href={`/${folderName}`}>
-          {folderName.replace(/_/g, ' ')} <>&nbsp;</>
-        </Link>
+        <a
+          href="#"
+          onClick={() => {
+            if (folderName === 'data') {
+              window.history.back(); // Kembali ke halaman sebelumnya
+            } else {
+              // Navigasi ke halaman yang sesuai jika bukan "data"
+              window.location.href = `/${folderName}`;
+            }
+          }}
+        >
+          {folderName
+            .replace(/_/g, ' ')
+            .split(' ')
+            .map(
+              (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            )
+            .join(' ')}{' '}
+          <>&nbsp;</>
+        </a>
       )}
     </div>
   );
-  const { slug, tahun } = router.query;
 
-  if (slug) {
-    const formattedSlug = slug
-      .toString()
-      .replace(/_\d+$/, '')
-      .replace(/_/g, ' ');
-    breadcrumbItems.push(
-      <div key="slug" className="breadcrumb-item text-base hover:no-underline">
-        <Link href={`/${folderName}/${slug}`}>
-          {formattedSlug} <>&nbsp;</>
-        </Link>
-      </div>
-    );
-  }
+  const { slug } = router.query;
 
-  if (tahun) {
-    breadcrumbItems.push(
-      <div key="tahun" className="breadcrumb-item text-base hover:no-underline">
-        Tahun {tahun} <>&nbsp;</>
-      </div>
-    );
+  if (typeof slug === 'string') {
+    const slugParts = slug.split('_');
+    const yearPart = slugParts.find((part) => part.match(/^\d{4}$/)); // Cari tahun dalam slug
+
+    if (yearPart) {
+      const formattedYear = yearPart;
+      const formattedSlug = slug
+        .replace(`_${yearPart}`, '') // Hapus tahun dari slug
+        .replace(/_/g, ' ');
+
+      breadcrumbItems.push(
+        <div
+          key="slug"
+          className="breadcrumb-item text-base hover:no-underline"
+        >
+          <Link href={`/${folderName}/${slug}`}>
+            {formattedSlug} ({formattedYear}) <>&nbsp;</>
+          </Link>
+        </div>
+      );
+    }
   }
 
   return (

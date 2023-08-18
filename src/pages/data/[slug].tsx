@@ -18,7 +18,6 @@ import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
 import {
   BsFileEarmarkCodeFill,
   BsFillClipboard2CheckFill,
@@ -45,8 +44,8 @@ import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
+import ComponentGrafik from './ComponentGrafik';
 import DownloadComponent from './DownloadComponent';
-import dataTahun from './dummytahun.json';
 import ModalMsInd from './ModalMsInd';
 import ModalMsKeg from './ModalMsKeg';
 import ModalMsVar from './ModalMsVar';
@@ -62,12 +61,20 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+interface NewDataset {
+  judul: string;
+  count_view: string;
+  // Add other properties as needed
+}
+
 interface YourDataType {
-  // Define the properties of the data object here
-  // For example:
-  id: number;
-  name: string;
-  // Add more properties as needed
+  data: {
+    id: number;
+    name: string;
+    priode: string;
+    new_dataset: NewDataset; // Add the new_dataset property
+  }[];
 }
 
 interface TahunProps {
@@ -75,6 +82,8 @@ interface TahunProps {
 }
 
 const Tahun: React.FC<TahunProps> = ({ data }) => {
+  // console.log(data);
+
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVarOpen, setIsModalVarOpen] = useState(false);
@@ -105,7 +114,6 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
   const closeModalInd = () => {
     setIsModalIndOpen(false);
   };
-  // console.log(data);
   const DataTable = dynamic(() => import('react-data-table-component'), {
     ssr: false,
   });
@@ -113,11 +121,8 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
   const [activeTab, setActiveTab] = useState('standardata');
   const [activeTabTable, setActiveTabTable] = useState('tabel');
   const [searchTerm, setSearchTerm] = useState('');
-  // const [dataDetail] = useState(dataTahun);
   const [dataDetail] = useState(data);
-  // const [shareLink] = useState('');
   const [shareUrl, setShareUrl] = useState('');
-  // console.log(dataDetail.new_dataset.grup);
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setShareUrl(window.location.href);
@@ -137,7 +142,8 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
     });
   };
 
-  const { slug, tahun } = router.query;
+  const slug = router.query;
+
   const handleTabClick = (tabName: React.SetStateAction<string>) => {
     setActiveTab(tabName);
   };
@@ -145,150 +151,42 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
     setActiveTabTable(tabName);
   };
 
-  useEffect(() => {}, [slug, tahun]);
-
+  useEffect(() => {}, [slug]);
+  // console.log(slug);
   const rowTable = dataDetail.source_media[0].row;
+
   const dataRowExcel = JSON.parse(rowTable);
 
-  const rowTabel = dataRowExcel.filter((col) => col !== 'id');
+  const rowTabel = dataRowExcel.filter((col: string) => col !== 'id');
 
   const valTable = dataDetail.source_media[0].value;
-  const dataValueExcel = JSON.parse(valTable);
 
-  const valueTabel = dataValueExcel.map((val) => {
-    const { id, ...rest } = val;
+  const dataValueExcel = JSON.parse(valTable);
+  const valueTabel = dataValueExcel.map((val: Record<string, any>) => {
+    const { ...rest } = val;
     return rest;
   });
 
-  function generateColumns(rowTabel: any[]) {
-    return rowTabel.map((column) => ({
+  function generateColumns(dataRows: any[]) {
+    return dataRows.map((column) => ({
       name: column,
-      selector: column,
+      selector: (row: { [x: string]: any }) => row[column], // Use selector function
       sortable: true,
     }));
   }
+
   const columns = generateColumns(rowTabel);
-  const filteredData = valueTabel.filter((row) =>
-    Object.values(row)
-      .join(' ')
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+  const filteredData = valueTabel.filter(
+    (row: { [s: string]: unknown } | ArrayLike<unknown>) =>
+      Object.values(row)
+        .join(' ')
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
   // console.log(filteredData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-  };
-
-  const [labelFilter, setLabelFilter] = useState('');
-  const [labelFilterB, setLabelFilterB] = useState('index');
-  const [labelAtas, setLabelAtas] = useState('');
-  const [chartType, setChartType] = useState('Line');
-  const [axisBList, setAxisBList] = useState([]);
-
-  const handleAddSeries = () => {
-    const newAxisBList = [...axisBList, axisBList.length]; // Add a new index to the list
-    setAxisBList(newAxisBList);
-  };
-
-  const ChartComponent =
-    chartType === 'Bar' ? Bar : chartType === 'Line' ? Line : Pie;
-
-  const handleChangeChartType = (event) => {
-    setChartType(event.target.value);
-  };
-
-  const handleChangeAxisA = (event: { target: { value: any } }) => {
-    const selectedIndex = event.target.value;
-    setLabelFilter(selectedIndex);
-  };
-  const handleChangeAxisB = (event: { target: { value: any } }) => {
-    const selectedIndex = event.target.value;
-    setLabelFilterB(selectedIndex);
-    setLabelAtas(dataTahun.row[selectedIndex]);
-  };
-
-  const labels = dataTahun.value.map(
-    (item) => item[Object.keys(item)[labelFilter]]
-  );
-  const dataChart = dataTahun.value;
-
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  const datasetOptions = {
-    backgroundColor:
-      chartType === 'Pie'
-        ? dataChart.map(() => getRandomColor())
-        : getRandomColor(),
-    borderColor:
-      chartType === 'Pie'
-        ? dataChart.map(() => getRandomColor())
-        : getRandomColor(),
-    borderWidth: 1,
-  };
-
-  const showChart = {
-    labels: labels.slice(1), // Group Column bawah kepinggir (Axis 1)
-    datasets: [
-      {
-        label: labelAtas,
-        dataDetail: dataChart.map((item) => Object.values(item)[labelFilterB]),
-        ...datasetOptions,
-      },
-      {
-        label: labelAtas,
-        dataDetail: dataChart.map((item) => Object.values(item)[labelFilterB]),
-        ...datasetOptions,
-      },
-    ],
-  };
-
-  const optionsChart = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          font: {
-            size: 14,
-            weight: 'bold',
-          },
-        },
-      },
-      title: {
-        display: true,
-        text: dataTahun.judul,
-        font: {
-          size: 18,
-          weight: 'bold',
-        },
-      },
-    },
-    scales: {
-      x: {
-        ticks: {
-          font: {
-            size: 12,
-          },
-        },
-      },
-      y: {
-        ticks: {
-          font: {
-            size: 12,
-          },
-          beginAtZero: true,
-        },
-      },
-    },
   };
 
   return (
@@ -398,34 +296,110 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
                 <div>
                   {dataDetail.standar_data.length > 0 ? (
                     <table className="w-full rounded-xl border">
-                      <tr className="border-2 text-left">
-                        <th className="border-2 p-2">Konsep</th>
-                        <th className="border-2 p-2">Definisi</th>
-                        <th className="border-2 p-2">Klasifikasi</th>
-                        <th className="border-2 p-2">Satuan</th>
-                        <th className="border-2 p-2">Ukuran</th>
-                      </tr>
-                      {dataDetail.standar_data.map((stndrData) => (
-                        <tr key={stndrData.id}>
-                          {' '}
-                          {/* Tambahkan key dengan nilai yang unik, misalnya dataDetail.id */}
-                          <td className="border-2 p-2">{stndrData.konsep}</td>
-                          <td className="border-2 p-2">{stndrData.definisi}</td>
-                          <td className="border-2 p-2">
-                            {stndrData.klasifikasi}
-                          </td>
-                          <td className="border-2 p-2">{stndrData.satuan}</td>
-                          <td className="border-2 p-2">{stndrData.ukuran}</td>
+                      <tbody>
+                        <tr className="border-2 text-left">
+                          <th className="border-2 p-2">Konsep</th>
+                          <th className="border-2 p-2">Definisi</th>
+                          <th className="border-2 p-2">Klasifikasi</th>
+                          <th className="border-2 p-2">Satuan</th>
+                          <th className="border-2 p-2">Ukuran</th>
                         </tr>
-                      ))}
+                        {dataDetail.standar_data.map(
+                          (stndrData: {
+                            id: React.Key | null | undefined;
+                            konsep:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | React.ReactFragment
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            definisi:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | React.ReactFragment
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            klasifikasi:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | React.ReactFragment
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            satuan:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | React.ReactFragment
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            ukuran:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | React.ReactFragment
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                          }) => (
+                            <tr key={stndrData.id}>
+                              {' '}
+                              {/* Tambahkan key dengan nilai yang unik, misalnya dataDetail.id */}
+                              <td className="border-2 p-2">
+                                {stndrData.konsep}
+                              </td>
+                              <td className="border-2 p-2">
+                                {stndrData.definisi}
+                              </td>
+                              <td className="border-2 p-2">
+                                {stndrData.klasifikasi}
+                              </td>
+                              <td className="border-2 p-2">
+                                {stndrData.satuan}
+                              </td>
+                              <td className="border-2 p-2">
+                                {stndrData.ukuran}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
                     </table>
                   ) : (
                     <table className="w-full rounded-xl border">
-                      <tr>
-                        <td className="col-span-5 border-2 p-2 text-center">
-                          Standar Data Tidak Ada
-                        </td>
-                      </tr>
+                      <tbody>
+                        <tr>
+                          <td className="col-span-5 border-2 p-2 text-center">
+                            Standar Data Tidak Ada
+                          </td>
+                        </tr>
+                      </tbody>
                     </table>
                   )}
                 </div>
@@ -435,61 +409,63 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
             {activeTab === 'metadata' && (
               <div className="prose lg:prose-xl text-base">
                 <table className="w-full text-left text-base">
-                  <tr>
-                    <th className="w-44  font-medium">
-                      <div className="m-2 ">Tanggal Dibuat</div>
-                    </th>
-                    <td className=" ">
-                      <div className="mx-2">{dataDetail.dibuat}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="w-44  font-medium">
-                      <div className="m-2 ">Tanggal Diubah</div>
-                    </th>
-                    <td className="">
-                      <div className="mx-2">{dataDetail.diubah}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="w-44  font-medium">
-                      <div className="m-2 ">Metadata Kegiatan</div>
-                    </th>
-                    <td className="cursor-pointer px-4">
-                      <div
-                        className="inline-block rounded-md bg-[#fa65b1] p-2 text-white"
-                        onClick={handleClick}
-                      >
-                        {dataDetail.ms_keg.judul}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="w-44  font-medium">
-                      <div className="m-2 ">Metadata Variabel</div>
-                    </th>
-                    <td className="cursor-pointer px-4">
-                      <div
-                        className="inline-block rounded-md bg-[#fa446b] p-2 text-white"
-                        onClick={handleClickVar}
-                      >
-                        {dataDetail.ms_var.nama_variabel}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="w-44  font-medium">
-                      <div className="m-2 ">Metadata Indikator</div>
-                    </th>
-                    <td className="cursor-pointer px-4">
-                      <div
-                        className="inline-block rounded-md bg-[#e8ff16] p-2 text-black"
-                        onClick={handleClickInd}
-                      >
-                        {dataDetail.ms_ind.nama_indikator}
-                      </div>
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <th className="w-44  font-medium">
+                        <div className="m-2 ">Tanggal Dibuat</div>
+                      </th>
+                      <td className=" ">
+                        <div className="mx-2">{dataDetail.dibuat}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="w-44  font-medium">
+                        <div className="m-2 ">Tanggal Diubah</div>
+                      </th>
+                      <td className="">
+                        <div className="mx-2">{dataDetail.diubah}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="w-44  font-medium">
+                        <div className="m-2 ">Metadata Kegiatan</div>
+                      </th>
+                      <td className="cursor-pointer px-4">
+                        <div
+                          className="inline-block rounded-md bg-[#fa65b1] p-2 text-white"
+                          onClick={handleClick}
+                        >
+                          {dataDetail.ms_keg?.judul || '-'}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="w-44  font-medium">
+                        <div className="m-2 ">Metadata Variabel</div>
+                      </th>
+                      <td className="cursor-pointer px-4">
+                        <div
+                          className="inline-block rounded-md bg-[#fa446b] p-2 text-white"
+                          onClick={handleClickVar}
+                        >
+                          {dataDetail.ms_var?.nama_variabel || '-'}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="w-44  font-medium">
+                        <div className="m-2 ">Metadata Indikator</div>
+                      </th>
+                      <td className="cursor-pointer px-4">
+                        <div
+                          className="inline-block rounded-md bg-[#e8ff16] p-2 text-black"
+                          onClick={handleClickInd}
+                        >
+                          {dataDetail.ms_ind?.nama_indikator || '-'}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             )}
@@ -594,108 +570,11 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
               </div>
             )}
           </div>
-
-          <div className="py-4 pb-6">
-            {activeTabTable === 'grafik' && (
-              <div className="prose lg:prose-xl text-base">
-                <h2 className="mb-4  font-bold">Grafik</h2>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-2 ">
-                    <ChartComponent
-                      options={optionsChart}
-                      dataDetail={showChart}
-                    />
-                  </div>
-                  <div className="rounded border px-5">
-                    <p>Sesuaikan Tampilan Grafik</p>
-                    <label
-                      htmlFor="typechart"
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Gaya Grafik
-                    </label>
-                    <select
-                      id="typechart"
-                      onChange={handleChangeChartType}
-                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    >
-                      <option selected>--- PILIH ---</option>
-                      <option value="Bar">Bar Chart</option>
-                      <option value="Line">Line Chart</option>
-                      <option value="Pie">Pie Chart</option>
-                    </select>
-                    <label
-                      htmlFor="axisa"
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Axis A
-                    </label>
-                    <select
-                      id="axisa"
-                      onChange={handleChangeAxisA}
-                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    >
-                      <option selected>--- PILIH ---</option>
-                      {dataTahun.row.map((item, index) => (
-                        <option key={index} value={index}>
-                          {item
-                            .replace(/_/g, ' ')
-                            .replace(/\b\w/g, (match) => match.toUpperCase())}
-                        </option>
-                      ))}
-                    </select>
-
-                    <label
-                      htmlFor="axisb"
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Axis B
-                    </label>
-                    <select
-                      id="axisa"
-                      onChange={handleChangeAxisB}
-                      className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    >
-                      <option selected>--- PILIH ---</option>
-                      {dataTahun.row.map((item, index) => (
-                        <option key={index} value={index}>
-                          {item
-                            .replace(/_/g, ' ')
-                            .replace(/\b\w/g, (match) => match.toUpperCase())}
-                        </option>
-                      ))}
-                    </select>
-                    <label
-                      htmlFor="axisb"
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Axis B
-                    </label>
-                    {axisBList.map((axisBIndex) => (
-                      <select
-                        key={axisBIndex}
-                        id={`axisb-${axisBIndex}`}
-                        onChange={handleChangeAxisB}
-                        className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                      >
-                        <option selected>--- PILIH ---</option>
-                        {dataTahun.row.map((item, index) => (
-                          <option key={index} value={index}>
-                            {item
-                              .replace(/_/g, ' ')
-                              .replace(/\b\w/g, (match) => match.toUpperCase())}
-                          </option>
-                        ))}
-                      </select>
-                    ))}
-                    <div className="flex justify-end">
-                      <button onClick={handleAddSeries}>Tambah Series</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          {activeTabTable === 'grafik' && (
+            <div className="mt-4">
+              <ComponentGrafik data={dataDetail} />
+            </div>
+          )}
         </div>
         <ModalMsKeg
           isModalOpen={isModalOpen}
@@ -720,10 +599,11 @@ const Tahun: React.FC<TahunProps> = ({ data }) => {
 export const getServerSideProps: GetServerSideProps = async ({
   params,
 }: GetServerSidePropsContext) => {
-  const { slugData } = params as { slugData: string };
+  const { slug } = params as { slug: string };
+  // console.log('ini slug data', slugData);
 
   // Fetch dataDetail from your backend API using the 'slug'
-  const res = await http().get(`data/${slugData}`);
+  const res = await http().get(`data/${slug}`);
   // console.log(res);
 
   const { data } = res.data.data;
