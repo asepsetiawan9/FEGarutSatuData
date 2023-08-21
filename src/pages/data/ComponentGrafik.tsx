@@ -1,15 +1,23 @@
-// Grafik.js
+import type { _DeepPartialObject } from 'chart.js/dist/types/utils';
 import React, { useState } from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 
+type SourceMediaItem = {
+  row: string;
+  value: string;
+  // Add other properties as needed
+};
+type ComponentGrafikProps = {
+  data: SourceMediaItem[]; // Array of objects
+};
 const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
-  // console.log(data);
-
   const [labelFilter, setLabelFilter] = useState('');
   const [labelFilterB, setLabelFilterB] = useState('index');
-  const [labelAtas, setLabelAtas] = useState('');
+  const [labelFilterC, setLabelFilterC] = useState('');
+  const [labelFilterD, setLabelFilterD] = useState('');
   const [chartType, setChartType] = useState('Line');
-  const [axisBList, setAxisBList] = useState([]);
+  const [showAxisC, setShowAxisC] = useState(false);
+  const [showAxisD, setShowAxisD] = useState(false);
 
   const dataRow = data.source_media[0].row;
   const dataRowChart = JSON.parse(dataRow);
@@ -17,14 +25,15 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
   const dataForChart = data.source_media[0].value;
   const dataChart = JSON.parse(dataForChart);
 
-  const handleAddSeries = () => {
-    const newAxisBList = [...axisBList, axisBList.length]; // Add a new index to the list
-    setAxisBList(newAxisBList);
-  };
-  const ChartComponent =
-    // eslint-disable-next-line no-nested-ternary
-    chartType === 'Bar' ? Bar : chartType === 'Line' ? Line : Pie;
+  let ChartComponent;
 
+  if (chartType === 'Bar') {
+    ChartComponent = Bar;
+  } else if (chartType === 'Line') {
+    ChartComponent = Line;
+  } else {
+    ChartComponent = Pie;
+  }
   const handleChangeChartType = (event: { target: { value: any } }) => {
     const newChartType = event.target.value;
     setChartType(newChartType);
@@ -34,25 +43,55 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
     const selectedIndex = event.target.value;
     setLabelFilter(selectedIndex);
   };
+  const cleanAndConvertToNumber = (value: string) => {
+    if (!value) {
+      return undefined;
+    }
 
+    if (typeof value !== 'string') {
+      return value;
+    }
+
+    const cleanedValue = value.replace(/%/g, '').replace(',', '.');
+    const numericValue = parseFloat(cleanedValue);
+    return Number.isNaN(numericValue) ? undefined : numericValue;
+  };
   const handleChangeAxisB = (event: { target: { value: any } }) => {
     const selectedIndex = event.target.value;
-    setLabelFilterB(selectedIndex);
-    setLabelAtas(dataRowChart[selectedIndex]);
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterB(numericValue !== undefined ? numericValue.toString() : '');
   };
 
+  const handleChangeAxisC = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterC(numericValue !== undefined ? numericValue.toString() : '');
+  };
+
+  const handleChangeAxisD = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterD(numericValue !== undefined ? numericValue.toString() : '');
+  };
+
+  const handleToggleAxisC = () => {
+    setShowAxisC(!showAxisC);
+    setLabelFilterC('');
+  };
+
+  const handleToggleAxisD = () => {
+    setShowAxisD(!showAxisD);
+    setLabelFilterD('');
+  };
   const labels = dataChart.map((item: { [x: string]: any }) => {
     const key = Object.keys(item)[labelFilter as keyof typeof item];
-    return item[key];
+    return item[key as keyof typeof item];
   });
-  // console.log(LabelFilterB);
 
-  // console.log(dataRowChart);
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i += 1) {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
@@ -69,18 +108,30 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
         : getRandomColor(),
     borderWidth: 1,
   };
+
+  const allDatasets = [labelFilterB, labelFilterC, labelFilterD].map(
+    (axisIndex) => {
+      const label = dataRowChart[axisIndex];
+      return {
+        label,
+        data: dataChart.map(
+          (item: { [s: string]: unknown } | ArrayLike<unknown>) => {
+            const values = Object.values(item);
+            const value = values[axisIndex];
+            return cleanAndConvertToNumber(value);
+          }
+        ),
+        ...datasetOptions,
+      };
+    }
+  );
+
   const showChart = {
     labels,
-    datasets: [
-      {
-        label: labelAtas,
-        data: dataChart.map((item) => Object.values(item)[labelFilterB]),
-        ...datasetOptions,
-      },
-    ],
+    datasets: allDatasets,
   };
 
-  const optionsChart = {
+  const optionsChart: _DeepPartialObject = {
     responsive: true,
     plugins: {
       legend: {
@@ -119,6 +170,7 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
       },
     },
   };
+
   return (
     <>
       <h2 className="mb-4 font-bold">Grafik</h2>
@@ -159,17 +211,16 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
             {dataRowChart.map(
               (
                 item: string,
-                index: readonly string[] | React.Key | null | undefined
+                index: string | number | readonly string[] | undefined
               ) => (
-                <option key={index} value={index}>
+                <option key={`${item}_${index}`} value={index}>
                   {item
                     .replace(/_/g, ' ')
-                    .replace(/\b\w/g, (match: string) => match.toUpperCase())}
+                    .replace(/\b\w/g, (match) => match.toUpperCase())}
                 </option>
               )
             )}
           </select>
-
           <label
             htmlFor="axisb"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -185,9 +236,9 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
             {dataRowChart.map(
               (
                 item: string,
-                index: readonly string[] | React.Key | null | undefined
+                index: string | number | readonly string[] | undefined
               ) => (
-                <option key={index} value={index}>
+                <option key={`${item}_${index}`} value={index}>
                   {item
                     .replace(/_/g, ' ')
                     .replace(/\b\w/g, (match: string) => match.toUpperCase())}
@@ -195,37 +246,77 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
               )
             )}
           </select>
-          <label
-            htmlFor="axisb"
-            className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          <button
+            onClick={handleToggleAxisC}
+            className="mb-2 text-sm font-medium text-blue-500"
           >
-            Axis B
-          </label>
-          {axisBList.map((axisBIndex) => (
-            <select
-              key={axisBIndex}
-              id={`axisb-${axisBIndex}`}
-              onChange={handleChangeAxisB}
-              className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            >
-              <option defaultValue="">--- PILIH ---</option>
-              {dataRowChart.map(
-                (
-                  item: string,
-                  index: readonly string[] | React.Key | null | undefined
-                ) => (
-                  <option key={index} value={index}>
-                    {item
-                      .replace(/_/g, ' ')
-                      .replace(/\b\w/g, (match: string) => match.toUpperCase())}
-                  </option>
-                )
-              )}
-            </select>
-          ))}
-          <div className="flex justify-end">
-            <button onClick={handleAddSeries}>Tambah Series</button>
-          </div>
+            {showAxisC ? 'Axis C' : 'Tampilkan Axis C'}
+          </button>{' '}
+          <br />
+          {showAxisC && (
+            <div className="mb-2 flex items-center">
+              <select
+                id="axisc"
+                onChange={handleChangeAxisC}
+                className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              >
+                <option defaultValue="">--- PILIH ---</option>
+                {dataRowChart.map(
+                  (
+                    item: string,
+                    index: string | number | readonly string[] | undefined
+                  ) => (
+                    <option key={`${item}_${index}`} value={index}>
+                      {item
+                        .replace(/_/g, ' ')
+                        .replace(/\b\w/g, (match) => match.toUpperCase())}
+                    </option>
+                  )
+                )}
+              </select>
+              <button
+                onClick={handleToggleAxisC}
+                className="text-sm text-red-500"
+              >
+                &#10006;
+              </button>
+            </div>
+          )}
+          <button
+            onClick={handleToggleAxisD}
+            className="mb-2 text-sm font-medium text-blue-500"
+          >
+            {showAxisD ? 'Axis D' : 'Tampilkan Axis D'}
+          </button>
+          {showAxisD && (
+            <div className="mb-2 flex items-center">
+              <select
+                id="axisd"
+                onChange={handleChangeAxisD}
+                className="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              >
+                <option defaultValue="">--- PILIH ---</option>
+                {dataRowChart.map(
+                  (
+                    item: string,
+                    index: string | number | readonly string[] | undefined
+                  ) => (
+                    <option key={`${item}_${index}`} value={index}>
+                      {item
+                        .replace(/_/g, ' ')
+                        .replace(/\b\w/g, (match) => match.toUpperCase())}
+                    </option>
+                  )
+                )}
+              </select>
+              <button
+                onClick={handleToggleAxisD}
+                className="text-sm text-red-500"
+              >
+                &#10006;
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
