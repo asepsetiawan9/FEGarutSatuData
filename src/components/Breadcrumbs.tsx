@@ -63,6 +63,22 @@ function Breadcrumbs({ router }: BreadcrumbsProps) {
           </Link>
         </div>
       );
+    } else {
+      const cleanedSlug = slug.replace(/[-\d]*$/, '');
+      const formattedSlug = cleanedSlug
+        .replace(/[_-]/g, ' ') // Remove underscores and hyphens
+        .split(' ')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1)) // Capitalize each part
+        .join(' ');
+
+      breadcrumbItems.push(
+        <div
+          key="slug"
+          className="breadcrumb-item text-base hover:no-underline"
+        >
+          <Link href={`/${folderName}/${slug}`}>{formattedSlug}</Link>
+        </div>
+      );
     }
   }
 
