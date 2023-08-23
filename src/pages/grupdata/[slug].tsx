@@ -1,33 +1,128 @@
 import { useRouter } from 'next/router';
-import React from 'react';
-import {
-  FiCalendar,
-  FiClock,
-  FiEye,
-  FiGrid,
-  FiSearch,
-  FiUser,
-} from 'react-icons/fi';
+import type { Key, ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FiCalendar, FiClock, FiEye, FiGrid, FiUser } from 'react-icons/fi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ColorRing } from 'react-loader-spinner';
 
 import BreadcrumbsWrapper from '@/components/Breadcrumbs';
+import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-import data from './dummy.json';
+type DatasetType = {
+  jumlah_data: ReactNode;
+  count_view: ReactNode;
+  date_upload: ReactNode;
+  range_years: ReactNode;
+  grup: any;
+  opd: any;
+  id: Key | null | undefined;
+  judul: string;
+  deskripsi: string;
+};
 
+type GrupDataDetailType = {
+  length: any;
+  id: number;
+  slug: string;
+  name: string;
+  gambar: string;
+  created_at: string;
+  dataset_count: number;
+  desc: string;
+  dataset: DatasetType[];
+};
+
+type GrupType = string;
 const GroupData = () => {
   const router = useRouter();
   const { slug } = router.query;
+  const [data, setData] = useState<GrupDataDetailType | null>(null);
+  const [allGrup, setAllGrup] = useState<GrupType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedOpd, setSelectedOpd] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const selectedData = data.find((item) => item.slug === slug);
-  const jumlahData = selectedData ? selectedData.data.length : 0;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await http().get(`/grups/${slug}`);
+        const resultData = response.data.data;
+        const resultGrup = response.data.data.all_opd as GrupType[];
+        setData(resultData);
+        setAllGrup(resultGrup);
+        setIsLoading(false);
+        // Set searchResults ke data awal dari server
+      } catch (error) {
+        setIsLoading(false);
+        // when error
+      }
+    };
+
+    if (slug) {
+      fetchData();
+    }
+  }, [slug]);
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex items-center justify-center">
+          <ColorRing
+            visible={true}
+            height={80}
+            width={80}
+            ariaLabel="blocks-loading"
+            colors={['#b8c480', '#B2A3B5', '#F4442E', '#51E5FF', '#429EA6']}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return <p>Data not available.</p>; // Show message if data is null
+  }
+
+  // const data = data.find((item) => item.slug === slug);
+  const totalPageCount = Math.ceil((data?.dataset?.length || 0) / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDataset = data?.dataset?.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber: React.SetStateAction<number>) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleItemsPerPageChange = (event: { target: { value: string } }) => {
+    setItemsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+  };
+  const handleOpdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOpd(event.target.value);
+  };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredDataset = paginatedDataset?.filter((item) =>
+    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredByOpd = filteredDataset?.filter(
+    (item) => selectedOpd === '' || item.opd.name === selectedOpd
+  );
+  const jumlahData = data ? data.length : 0;
 
   return (
     <Main
       meta={
         <Meta
-          title={`Grup Data ${selectedData?.title}`}
-          description={`Data terkait grup ${selectedData?.title}`}
+          title={`Grup Data ${data?.name}`}
+          description={`Data terkait grup ${data?.name}`}
         />
       }
     >
@@ -35,13 +130,13 @@ const GroupData = () => {
         <div className="px-4">
           <div className="grid grid-cols-4 gap-3">
             <img
-              src={selectedData?.image}
+              src={data?.gambar}
               className="h-[150px] w-full rounded-md object-cover"
-              alt={selectedData?.title}
+              alt={data?.name}
             />
             <div className="col-span-3">
-              <h1 className="font-bold">{selectedData?.title}</h1>
-              <p className="!my-1.5 text-base">{selectedData?.description}</p>
+              <h1 className="font-bold">{data?.name}</h1>
+              <p className="!my-1.5 text-base">{data?.desc}</p>
             </div>
           </div>
           {/* <div className="mb-5 mt-2 w-full border-b border-[#acacac]"></div> */}
@@ -74,24 +169,25 @@ const GroupData = () => {
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-10 text-sm text-gray-900 focus:outline-[#fa65b1]"
                 placeholder="Cari dataset disini...."
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
             </div>
-            <div className="relative col-span-2 w-full">
-              <input
-                type="text"
+            <div className="relative col-span-3 w-full">
+              <select
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-3 text-sm text-gray-900 focus:outline-[#fa65b1]"
-                placeholder="Pilih OPD"
-              />
-            </div>
-            <div>
-              <button
-                type="submit"
-                className="flex w-full items-center justify-center rounded-md border bg-[#E8AEE2] px-4 py-1.5 text-sm text-white hover:border-primary hover:bg-white hover:text-primary"
+                value={selectedOpd}
+                onChange={handleOpdChange}
               >
-                <FiSearch className="mr-1 " />
-                <span>Cari</span>
-              </button>
+                <option value="">Pilih Opd</option>
+
+                {allGrup.map((grup, index) => (
+                  <option key={index} value={grup}>
+                    {grup}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="flex flex-row justify-between">
@@ -116,7 +212,7 @@ const GroupData = () => {
             </div>
           </div>
           <div className="flex flex-col gap-5 pt-4">
-            {selectedData?.data.map((item) => (
+            {filteredByOpd?.map((item) => (
               <>
                 <div className="grid grid-cols-5 gap-4">
                   <div key={item.id}>
@@ -126,42 +222,107 @@ const GroupData = () => {
                           ? item.image
                           : 'https://garutkab.go.id/assets/img/no-image.jpeg'
                       }
-                      alt={item.title}
+                      alt={item.judul}
                       className="h-[120px] w-full rounded-md object-cover"
                     />
                   </div>
 
                   <div className="col-span-2 flex flex-col justify-between">
                     <div>
-                      <p className="!my-1 text-base font-bold">{item.title}</p>
-                      <p className="!my-1 text-base">{item.description}</p>
+                      <p className="!my-1 text-base font-bold">{item.judul}</p>
+                      <p className="!my-1 text-base">{item.deskripsi}</p>
                     </div>
                     <div className="my-2 flex flex-row gap-5">
                       <div className="flex flex-row gap-2 text-sm">
                         <FiUser className="mt-1" />
-                        <span>Dinas Perhubungan</span>
+                        <span>{item.opd.name}</span>
                       </div>
                       <div className="flex flex-row gap-2 text-sm">
                         <FiGrid className="mt-1" />
-                        <span>Infrastruktur</span>
+                        <span>{item.grup.name}</span>
                       </div>
                       <div className="flex flex-row gap-2 text-sm">
                         <FiCalendar className="mt-1" />
-                        <span>2019-2021 (3)</span>
+                        <span>
+                          {item.range_years} ({item.jumlah_data})
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="flex flex-row gap-2 text-sm">
                     <FiClock className="mt-1" />
-                    <span>5 Hari yang lalu</span>
+                    <span>{item.date_upload}</span>
                   </div>
                   <div className="flex flex-row gap-2 text-center text-sm">
                     <FiEye className="mt-1" />
-                    <span>120</span>
+                    <span>{item.count_view}</span>
                   </div>
                 </div>
               </>
             ))}
+          </div>
+          <div className="flex justify-between">
+            <div className="mt-10 flex flex-row gap-3 text-sm font-bold">
+              <div>
+                <select
+                  id="underline_select"
+                  className="w-full rounded border-2 border-[#acacac] bg-transparent  text-gray-500 focus:border-[#acacac] focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
+                  value={itemsPerPage}
+                  onChange={handleItemsPerPageChange}
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                </select>
+              </div>
+              <span>Menampilkan data dari</span>
+            </div>
+            <div className="mt-4 flex justify-center">
+              <ul className="flex gap-2">
+                {currentPage > 1 && (
+                  <li>
+                    <button
+                      className="rounded bg-green-500 px-3 py-1 text-white"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      Prev
+                    </button>
+                  </li>
+                )}
+                {Array.from({ length: totalPageCount }, (_, index) => {
+                  const pageNumber = index + 1;
+                  const isFirstPageInRange =
+                    pageNumber >= currentPage && pageNumber <= currentPage + 3;
+                  if (isFirstPageInRange) {
+                    return (
+                      <li key={index}>
+                        <button
+                          className={`rounded px-3 py-1 ${
+                            currentPage === pageNumber
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                          onClick={() => handlePageChange(pageNumber)}
+                        >
+                          {pageNumber}
+                        </button>
+                      </li>
+                    );
+                  }
+                  return null;
+                })}
+                {currentPage + 3 < totalPageCount && (
+                  <li>
+                    <button
+                      className="rounded bg-green-500 px-3 py-1 text-white"
+                      onClick={() => handlePageChange(currentPage + 4)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </BreadcrumbsWrapper>

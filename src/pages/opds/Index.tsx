@@ -1,27 +1,76 @@
-import React, { useState } from 'react';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { FiPackage } from 'react-icons/fi';
 
 import BreadcrumbsWrapper from '@/components/Breadcrumbs';
+import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-import data from './dummy.json';
-
-// eslint-disable-next-line import/no-named-as-default
-// import Tabel from './Tabel';
+type OpdDataType = {
+  id: number;
+  slug: string;
+  name: string;
+  gambar: string;
+  created_at: string;
+  total_dataset: number;
+};
 
 const Index = () => {
-  // const countData = data.length;
-  const [searchResults, setSearchResults] = useState(data);
-  const countData = searchResults.length;
+  const [data, setData] = useState<OpdDataType[]>([]);
+  const [searchResults, setSearchResults] = useState<OpdDataType[]>([]); // Ubah menjadi data awal dari server
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState<string>('terbaru');
 
-  const handleSearch = (event: { target: { value: any } }) => {
-    const keyword = event.target.value;
-    const results = data.filter((item) =>
-      item.judul.toLowerCase().includes(keyword.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await http().get('/opds');
+        const resultData = response.data.data;
+        setData(resultData);
+        setSearchResults(resultData); // Set searchResults ke data awal dari server
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = event.target.value.toLowerCase();
+    const filteredData = data.filter((item) =>
+      item.name.toLowerCase().includes(keyword)
     );
-    setSearchResults(results);
+
+    const sortedResults = [...filteredData];
+    if (filter === 'terpopuler') {
+      sortedResults.sort((a, b) => b.total_dataset - a.total_dataset);
+    } else if (filter === 'terbaru') {
+      sortedResults.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    }
+
+    setSearchResults([...sortedResults]);
   };
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(event.target.value);
+
+    const sortedResults = [...searchResults];
+    if (event.target.value === 'terbanyak') {
+      sortedResults.sort((a, b) => b.total_dataset - a.total_dataset);
+    } else if (event.target.value === 'tersedikit') {
+      sortedResults.sort((a, b) => a.total_dataset - b.total_dataset);
+    }
+
+    setSearchResults(sortedResults);
+  };
+
+  const countData = searchResults.length;
 
   return (
     <Main
@@ -82,45 +131,49 @@ const Index = () => {
                 <select
                   id="underline_select"
                   className="peer block w-full appearance-none border-0 border-b-2 border-[#acacac] bg-transparent px-3 py-2 text-sm text-gray-500 focus:border-[#acacac] focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
+                  value={filter}
+                  onChange={handleFilterChange}
                 >
-                  <option selected>Filter</option>
-                  <option value="US" selected>
-                    Terbaru
-                  </option>
-                  <option value="US">Terpopuler</option>
+                  <option value="terbanyak">Terbanyak Dataset</option>
+                  <option value="tersedikit">Tersedikit Dataset</option>
                 </select>
               </div>
             </div>
           </div>
           <div className="mb-5 mt-2 w-full border-b border-[#acacac]"></div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {searchResults.length === 0 ? (
-              <p className="col-span-4 text-center">Data Tidak Ditemukan</p>
-            ) : (
-              searchResults.map((item) => (
-                <a
-                  key={item.id}
-                  href={`opds/${item.slug}`}
-                  className="no-underline decoration-black hover:no-underline"
-                >
-                  <div className="text-center">
-                    <img
-                      src={item.image}
-                      alt={item.judul}
-                      className="h-[180px] w-full rounded-md object-cover"
-                    />
-                    <p className="!my-1 text-base font-bold">{item.judul}</p>
-                    <div className="flex flex-row justify-center gap-2 py-2 align-bottom text-base">
-                      <FiPackage className="mt-1 " />
-                      <span>
-                        Jumlah data: {item.jmldataset ? item.jmldataset : '0'}
-                      </span>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
+              {searchResults.length === 0 ? (
+                <p className="col-span-4 text-center">Data Tidak Ditemukan</p>
+              ) : (
+                searchResults.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/opds/${item.slug}`}
+                    className="no-underline decoration-black hover:no-underline"
+                  >
+                    <div className="text-center">
+                      <img
+                        src={item.gambar}
+                        alt={item.name}
+                        className="h-[180px] w-full rounded-md object-cover"
+                      />
+                      <p className="!my-1 text-base font-bold">{item.name}</p>
+                      <div className="flex flex-row justify-center gap-2 py-2 align-bottom text-base">
+                        <FiPackage className="mt-1 " />
+                        <span>
+                          Jumlah data:{' '}
+                          {item.total_dataset ? item.total_dataset : '0'}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              ))
-            )}
-          </div>
+                  </Link>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </BreadcrumbsWrapper>
     </Main>
