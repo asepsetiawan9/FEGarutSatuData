@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
 import type { Key, ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -11,11 +12,13 @@ import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
 type DatasetType = {
+  slug: any;
   jumlah_data: ReactNode;
   count_view: ReactNode;
   date_upload: ReactNode;
   range_years: ReactNode;
   grup: any;
+  image: string;
   opd: any;
   id: Key | null | undefined;
   judul: string;
@@ -45,6 +48,7 @@ const GroupData = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortMethod, setSortMethod] = useState('Terbaru');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,8 +119,43 @@ const GroupData = () => {
   const filteredByOpd = filteredDataset?.filter(
     (item) => selectedOpd === '' || item.opd.name === selectedOpd
   );
-  const jumlahData = data ? data.length : 0;
 
+  // sort data
+  const sortDatasetByPopularity = (dataset: DatasetType[]) => {
+    return dataset.slice().sort((a, b) => {
+      const viewCountA = parseInt(a.count_view as string, 10) || 0;
+      const viewCountB = parseInt(b.count_view as string, 10) || 0;
+
+      return viewCountB - viewCountA;
+    });
+  };
+
+  const sortDatasetByDate = (dataset: DatasetType[]) => {
+    return dataset.slice().sort((a, b) => {
+      const dateA = new Date(a.date_upload as string).getTime();
+      const dateB = new Date(b.date_upload as string).getTime();
+      return dateB - dateA;
+    });
+  };
+
+  const handleSortMethodChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSortMethod(event.target.value);
+  };
+
+  let sortedDataset = [...filteredByOpd];
+
+  if (sortMethod === 'Terpopuler') {
+    sortedDataset = sortDatasetByPopularity(sortedDataset);
+  } else if (sortMethod === 'Terbaru') {
+    sortedDataset = sortDatasetByDate(sortedDataset);
+  }
+  const jumlahData = sortedDataset ? sortedDataset.length : 0;
+  // console.log(sortedDataset);
+  const handleClickDataset = (slugData: any) => {
+    router.push(`/datasets/${slugData}`);
+  };
   return (
     <Main
       meta={
@@ -200,66 +239,87 @@ const GroupData = () => {
               <div>
                 <select
                   id="underline_select"
-                  className="peer block w-full appearance-none border-0 border-b-2 border-[#acacac] bg-transparent px-3 py-2  text-gray-500 focus:border-[#acacac] focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
+                  className="peer block w-full appearance-none border-0 border-b-2 border-[#acacac] bg-transparent px-3 py-2 text-gray-500 focus:border-[#acacac] focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
+                  value={sortMethod}
+                  onChange={handleSortMethodChange}
                 >
-                  <option selected>Filter</option>
-                  <option value="US" selected>
-                    Terbaru
-                  </option>
-                  <option value="US">Terpopuler</option>
+                  <option value="Terbaru">Terbaru</option>
+                  <option value="Terpopuler">Terpopuler</option>
                 </select>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-5 pt-4">
-            {filteredByOpd?.map((item) => (
-              <>
-                <div className="grid grid-cols-5 gap-4">
-                  <div key={item.id}>
-                    <img
-                      src={
-                        'image' in item && item.image
-                          ? item.image
-                          : 'https://garutkab.go.id/assets/img/no-image.jpeg'
-                      }
-                      alt={item.judul}
-                      className="h-[120px] w-full rounded-md object-cover"
-                    />
-                  </div>
+            {sortedDataset?.map((item) => {
+              const cleanedDeskripsi = item.deskripsi
+                .replace(/_x000D_/g, '')
+                .replace(/â€‹/g, '')
+                .replace(/\u200B/g, '');
 
-                  <div className="col-span-2 flex flex-col justify-between">
-                    <div>
-                      <p className="!my-1 text-base font-bold">{item.judul}</p>
-                      <p className="!my-1 text-base">{item.deskripsi}</p>
+              const truncatedDeskripsi =
+                cleanedDeskripsi.length > 90
+                  ? `${cleanedDeskripsi.substring(0, 90)}...`
+                  : cleanedDeskripsi;
+
+              return (
+                <>
+                  <a
+                    key={item.id}
+                    className="cursor-pointer p-4 no-underline decoration-black hover:no-underline"
+                    onClick={() => handleClickDataset(item.slug)}
+                  >
+                    <div className="grid grid-cols-5 gap-4">
+                      <div key={item.id}>
+                        <img
+                          src={
+                            'image' in item && item.image
+                              ? item.image
+                              : 'https://garutkab.go.id/assets/img/no-image.jpeg'
+                          }
+                          alt={item.judul}
+                          className="h-[120px] w-full rounded-md object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-2 flex flex-col justify-between">
+                        <div>
+                          <p className="!my-1 text-base font-bold">
+                            {item.judul}
+                          </p>
+                          <p className="!my-1 text-base">
+                            {parse(truncatedDeskripsi)}
+                          </p>
+                        </div>
+                        <div className="my-2 flex flex-row gap-5">
+                          <div className="flex flex-row gap-2 text-sm">
+                            <FiUser className="mt-1" />
+                            <span>{item.opd.name}</span>
+                          </div>
+                          <div className="flex flex-row gap-2 text-sm">
+                            <FiGrid className="mt-1" />
+                            <span>{item.grup.name}</span>
+                          </div>
+                          <div className="flex flex-row gap-2 text-sm">
+                            <FiCalendar className="mt-1" />
+                            <span>
+                              {item.range_years} ({item.jumlah_data})
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-row gap-2 text-sm">
+                        <FiClock className="mt-1" />
+                        <span>{item.date_upload}</span>
+                      </div>
+                      <div className="flex flex-row gap-2 text-center text-sm">
+                        <FiEye className="mt-1" />
+                        <span>{item.count_view}</span>
+                      </div>
                     </div>
-                    <div className="my-2 flex flex-row gap-5">
-                      <div className="flex flex-row gap-2 text-sm">
-                        <FiUser className="mt-1" />
-                        <span>{item.opd.name}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 text-sm">
-                        <FiGrid className="mt-1" />
-                        <span>{item.grup.name}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 text-sm">
-                        <FiCalendar className="mt-1" />
-                        <span>
-                          {item.range_years} ({item.jumlah_data})
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row gap-2 text-sm">
-                    <FiClock className="mt-1" />
-                    <span>{item.date_upload}</span>
-                  </div>
-                  <div className="flex flex-row gap-2 text-center text-sm">
-                    <FiEye className="mt-1" />
-                    <span>{item.count_view}</span>
-                  </div>
-                </div>
-              </>
-            ))}
+                  </a>
+                </>
+              );
+            })}
           </div>
           <div className="flex justify-between">
             <div className="mt-10 flex flex-row gap-3 text-sm font-bold">
@@ -273,6 +333,8 @@ const GroupData = () => {
                   <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="15">15</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
                 </select>
               </div>
               <span>Menampilkan data dari</span>
