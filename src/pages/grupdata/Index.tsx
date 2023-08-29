@@ -18,7 +18,7 @@ type GrupDataType = {
 const Index = () => {
   const [data, setData] = useState<GrupDataType[]>([]);
   const [searchResults, setSearchResults] = useState<GrupDataType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,29 +117,27 @@ const Index = () => {
           </div>
           <div className="mb-5 mt-2 w-full border-b border-[#acacac]"></div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {(searchResults.length > 0 ? searchResults : data).map(
-              (item, index) => (
-                <a
-                  key={item.id}
-                  href={`grupdata/${item.slug}`}
-                  className="no-underline decoration-black hover:no-underline"
-                >
-                  <div>
-                    <img
-                      src={item.gambar}
-                      alt={item.name}
-                      className="h-[180px] w-full rounded-md object-cover"
-                    />
-                    <p className="!my-1 text-base font-bold">{item.name}</p>
-                    <p className="!my-1 text-base">{item.desc}</p>
-                    <div className="flex flex-row gap-2 py-2 text-base">
-                      <FiPackage className="mt-1 " />
-                      <span>Jumlah data: {item.dataset_count}</span>
-                    </div>
+            {(searchResults.length > 0 ? searchResults : data).map((item) => (
+              <a
+                key={item.id}
+                href={`grupdata/${item.slug}`}
+                className="no-underline decoration-black hover:no-underline"
+              >
+                <div>
+                  <img
+                    src={item.gambar}
+                    alt={item.name}
+                    className="h-[180px] w-full rounded-md object-cover"
+                  />
+                  <p className="!my-1 text-base font-bold">{item.name}</p>
+                  <p className="!my-1 text-base">{item.desc}</p>
+                  <div className="flex flex-row gap-2 py-2 text-base">
+                    <FiPackage className="mt-1 " />
+                    <span>Jumlah data: {item.dataset_count}</span>
                   </div>
-                </a>
-              )
-            )}
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </BreadcrumbsWrapper>

@@ -154,12 +154,18 @@ const Index = () => {
                     href={`/opds/${item.slug}`}
                     className="no-underline decoration-black hover:no-underline"
                   >
-                    <div className="text-center">
+                    <div className="rounded border text-center shadow-sm">
                       <img
-                        src={item.gambar}
+                        src={
+                          item.gambar ===
+                          'https://garutkab.go.id/assets/img/no-image.jpeg'
+                            ? '/opd.jpg'
+                            : item.gambar
+                        }
                         alt={item.name}
                         className="h-[180px] w-full rounded-md object-cover"
                       />
+
                       <p className="!my-1 text-base font-bold">{item.name}</p>
                       <div className="flex flex-row justify-center gap-2 py-2 align-bottom text-base">
                         <FiPackage className="mt-1 " />
