@@ -237,7 +237,7 @@ const Index = () => {
               </div>
             </div>
           </div> */}
-          <div className="border-b-2 pt-2"></div>
+          <div className="my-2 border-b-2"></div>
           <div className="grid grid-cols-4 gap-5">
             {filteredInfografis.length === 0 ? (
               <p className="col-span-4 text-center">Data Tidak Ditemukan</p>
@@ -248,7 +248,7 @@ const Index = () => {
                     <img
                       alt={item.name}
                       src={item.gambar}
-                      className=" w-full rounded-md object-cover"
+                      className="h-[450px] w-full rounded-md object-cover"
                     />
                     <p className="!my-1 text-center text-base font-bold">
                       {item.name}
