@@ -50,6 +50,7 @@
     "react-image-magnifiers": "^1.4.0",
     "react-leaflet": "^4.2.1",
     "react-loader-spinner": "^5.3.4",
+    "react-responsive-carousel": "^3.2.23",
     "react-share": "^4.4.1",
     "react-toastify": "^9.1.2",
     "styled-components": "^5.3.9",
