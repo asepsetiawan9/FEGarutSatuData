@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
 interface SumberData {
+  tahun: string;
+  judul: string;
+  opd: any;
   id: number;
   sumber: string;
   sumberData: {
@@ -19,7 +22,7 @@ interface SumberData {
 }
 
 interface FilterProps {
-  dataFilter: SumberData[];
+  dataFilter: SumberData[]; // Menggunakan tipe SumberData
   onSubmit: (dataMap: any) => void;
 }
 
@@ -28,8 +31,7 @@ const Filter = ({ dataFilter, onSubmit }: FilterProps) => {
   const [selectedElement, setSelectedElement] = useState('');
   const [selectedTahun, setSelectedTahun] = useState('');
   const [sumberData, setSumberData] = useState(dataFilter);
-  const [tahunOptions, setTahunOptions] = useState([]);
-  const [dataMap, setDataMap] = useState([]);
+  const [dataMap, setDataMap] = useState<SumberData[]>([]);
   const [enable, setEnable] = useState(false);
 
   const handleSubmit = () => {
@@ -40,42 +42,34 @@ const Filter = ({ dataFilter, onSubmit }: FilterProps) => {
     setEnable(false);
     const sumber = event.target.value;
     setSelectedSumber(sumber);
-    const sumberObj = dataFilter.filter((data) => data.sumber === sumber)[0];
-    setSumberData(sumberObj.sumberData);
+    const sumberObj = dataFilter.filter((data) => data.opd.name === sumber);
+    setSumberData(sumberObj);
     setSelectedElement('');
     setSelectedTahun('');
   };
 
+  const uniqueOpdNames = Array.from(
+    new Set(dataFilter.map((sumber) => sumber.opd.name))
+  );
+
   const handleElementChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const element = event.target.value;
     setSelectedElement(element);
-    const elementObj = sumberData.filter((data) => data.element === element)[0];
+    const elementObj = sumberData.filter((data) => data.judul === element);
+    setSumberData(elementObj);
     setSelectedTahun('');
-    const tahunOptions = generateTahunOptions(elementObj.dataTahun);
-    setTahunOptions(tahunOptions);
-  };
-
-  const generateTahunOptions = (dataTahun) => {
-    const tahunOptions = dataTahun.map((data) => (
-      <option key={data.id} value={data.tahun}>
-        {data.tahun}
-      </option>
-    ));
-    return tahunOptions;
   };
 
   const handleTahunChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const tahun = event.target.value;
     setSelectedTahun(tahun);
 
-    const elementObj = sumberData.find(
-      (data) => data.element === selectedElement
+    const elementObj: SumberData[] = sumberData.filter(
+      (data) => data.tahun === tahun
     );
 
-    const tahunObj = elementObj?.dataTahun.find((data) => data.tahun === tahun);
-
-    if (tahunObj) {
-      setDataMap(tahunObj);
+    if (elementObj.length > 0) {
+      setDataMap(elementObj);
       setEnable(true);
     } else {
       setDataMap([]);
@@ -98,9 +92,9 @@ const Filter = ({ dataFilter, onSubmit }: FilterProps) => {
           onChange={handleSumberChange}
         >
           <option value="">Pilih Sumber</option>
-          {dataFilter.map((sumber) => (
-            <option key={sumber.id} value={sumber.sumber}>
-              {sumber.sumber}
+          {uniqueOpdNames.map((opdName) => (
+            <option key={opdName} value={opdName}>
+              {opdName}
             </option>
           ))}
         </select>
@@ -121,8 +115,8 @@ const Filter = ({ dataFilter, onSubmit }: FilterProps) => {
         >
           <option value="">Pilih Elemen</option>
           {sumberData.map((data) => (
-            <option key={data.id} value={data.element}>
-              {data.element}
+            <option key={data.id} value={data.judul}>
+              {data.judul}
             </option>
           ))}
         </select>
@@ -142,16 +136,11 @@ const Filter = ({ dataFilter, onSubmit }: FilterProps) => {
           disabled={!selectedElement}
         >
           <option value="">Pilih Tahun</option>
-          {sumberData.map((data) => {
-            if (data.element === selectedElement) {
-              return data.dataTahun.map((tahun) => (
-                <option key={tahun.id} value={tahun.tahun}>
-                  {tahun.tahun}
-                </option>
-              ));
-            }
-            return null;
-          })}
+          {sumberData.map((data) => (
+            <option key={data.id} value={data.tahun}>
+              {data.tahun}
+            </option>
+          ))}
         </select>
       </div>
       <div>

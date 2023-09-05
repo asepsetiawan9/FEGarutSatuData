@@ -23,7 +23,25 @@ type MapProps = {
   dataKecamatan: FeatureCollection;
 };
 export default function Map({ dataKecamatan }: MapProps) {
-  // console.log(dataKecamatan);
+  const featureCollection = {
+    type: 'FeatureCollection',
+    features: dataKecamatan[0]?.peta_values.map((feature) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'MultiPolygon',
+        coordinates: JSON.parse(feature.geometry.coordinates),
+      },
+      properties: {
+        kabupaten: 'GARUT',
+        tahun: dataKecamatan[0].judul,
+        kecamatan: feature.kec_name,
+        provinsi: 'JAWA BARAT',
+        nilai: feature.nilai,
+        judulData: dataKecamatan[0].judul,
+        keterangan: feature.keterangan,
+      },
+    })),
+  };
 
   const [geoData] = useState<Coords>({
     lat: -7.3708,
@@ -45,7 +63,7 @@ export default function Map({ dataKecamatan }: MapProps) {
   const geoJsonStyle = (feature: any) => {
     const nilaiValue = parseInt(feature.properties.nilai, 10);
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const arr = dataKecamatan.features.map((feature: any) =>
+    const arr = featureCollection.features.map((feature: any) =>
       parseInt(feature.properties.nilai, 10)
     );
     const maxValue = Math.max(...arr);
@@ -85,7 +103,7 @@ export default function Map({ dataKecamatan }: MapProps) {
     });
   };
 
-  const arr = dataKecamatan.features.map((feature: any) =>
+  const arr = featureCollection.features.map((feature: any) =>
     parseInt(feature.properties.nilai, 10)
   );
   const maxValue = Math.max(...arr);
@@ -147,7 +165,7 @@ export default function Map({ dataKecamatan }: MapProps) {
         <ChangeView coords={{ lat: center[0], lng: center[1] }} />
 
         <GeoJSON
-          data={dataKecamatan}
+          data={featureCollection}
           onEachFeature={onEachFeature}
           style={geoJsonStyle}
         />

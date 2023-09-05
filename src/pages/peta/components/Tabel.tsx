@@ -19,25 +19,19 @@ interface Props {
 const Tabel = ({ data }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const tableData: TableData[] = data.features.map(
+  const tableData: TableData[] = data[0]?.peta_values.map(
     (feature: {
-      properties: {
-        kecamatan: any;
-        element: any;
-        tahun: any;
-        nilai: any;
-        satuan: any;
-        sumber: any;
-        keterangan: any;
-      };
+      keterangan: string;
+      nilai: number;
+      kec_name: string;
+      judul: string;
     }) => ({
-      kecamatan: feature.properties.kecamatan,
-      element: feature.properties.element,
-      tahun: feature.properties.tahun,
-      nilai: feature.properties.nilai,
-      satuan: feature.properties.satuan,
-      sumber: feature.properties.sumber,
-      keterangan: feature.properties.keterangan,
+      kecamatan: feature.kec_name,
+      keterangan: feature.keterangan,
+      sumber: data[0].opd.name,
+      element: data[0].judul,
+      tahun: data[0].tahun,
+      nilai: feature.nilai,
     })
   );
 
@@ -57,7 +51,6 @@ const Tabel = ({ data }: Props) => {
     { name: 'Element', selector: (row: TableData) => row.element },
     { name: 'Tahun', selector: (row: TableData) => row.tahun },
     { name: 'Nilai', selector: (row: TableData) => row.nilai },
-    { name: 'Satuan', selector: (row: TableData) => row.satuan },
     { name: 'Sumber', selector: (row: TableData) => row.sumber },
     { name: 'Keterangan', selector: (row: TableData) => row.keterangan },
   ];
