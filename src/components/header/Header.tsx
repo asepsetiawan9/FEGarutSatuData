@@ -22,6 +22,10 @@ export default function Header() {
 
   const menuItems = [
     {
+      title: 'Home',
+      url: '/',
+    },
+    {
       title: 'Dataset',
       url: '/datasets',
     },

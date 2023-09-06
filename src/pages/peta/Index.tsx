@@ -3,16 +3,27 @@ import router from 'next/router';
 import React, { Suspense, useEffect, useState } from 'react';
 import { FiColumns } from 'react-icons/fi';
 
+import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-import kecamatanData from '../../../public/kecamatan.json';
 import BreadcrumbsWrapper from '../../components/Breadcrumbs';
 import Filter from './components/Filter';
-import dataPeta from './dummy.json';
 
+type PetaDataType = {
+  judul: string;
+};
 const Index = () => {
+  // console.log(dummy);
+
+  const [dataMap, setDataMap] = useState('');
+  const [data, setData] = useState<PetaDataType[]>([]);
+  const [, setIsLoading] = useState(true);
   const MapWithNoSSR = dynamic(() => import('./components/Map'), {
+    ssr: false,
+    loading: () => <p>Loading map...</p>,
+  });
+  const DynamicGarutMap = dynamic(() => import('./components/GarutMap'), {
     ssr: false,
     loading: () => <p>Loading map...</p>,
   });
@@ -22,41 +33,26 @@ const Index = () => {
     loading: () => <p>Loading table...</p>,
   });
 
-  const [dataMap, setDataMap] = useState(kecamatanData);
-
   useEffect(() => {
-    if (typeof window !== 'undefined' && dataMap.url) {
-      fetch(`http://localhost:3000/${dataMap.url}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Failed to fetch data');
-        })
-        .then((data) => {
-          setDataMap(data);
-        })
-        .catch((error) => console.error(error));
-    }
-  }, [dataMap.url]);
+    const fetchData = async () => {
+      try {
+        const response = await http().get('/peta');
+        const resultData = response.data;
+        setData(resultData);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
 
-  const featureCollection = {
-    type: 'FeatureCollection',
-    features: dataMap.features?.map((feature) => ({
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: feature.geometry.coordinates,
-      },
-      properties: {
-        ...feature.properties,
-      },
-    })),
-  };
+    fetchData();
+  }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleFilterSubmit = (dataMap: any) => {
     setDataMap(dataMap);
   };
+  // console.log(featureCollection);
 
   return (
     <Main
@@ -79,33 +75,40 @@ const Index = () => {
               <span>Peta Pembanding</span>
             </button>
           </div>
+          {/* filter */}
           <div className="py-3">
-            <Filter dataFilter={dataPeta} onSubmit={handleFilterSubmit} />
+            <Filter dataFilter={data} onSubmit={handleFilterSubmit} />
           </div>
         </div>
-      </BreadcrumbsWrapper>
-      <div className="flex w-full flex-col justify-center">
-        {dataMap.features ? (
-          <div id="map" className="w-full">
-            <Suspense fallback={<p>Loading map...</p>}>
-              {MapWithNoSSR && (
-                <MapWithNoSSR dataKecamatan={featureCollection} />
-              )}
+        {/* peta */}
+        <div className="flex w-full flex-col justify-center">
+          {dataMap[0] ? (
+            <div id="map" className="w-full">
+              <Suspense fallback={<p>Loading map...</p>}>
+                {<MapWithNoSSR dataKecamatan={dataMap} />}
+              </Suspense>
+            </div>
+          ) : (
+            <div id="map" className="w-full">
+              <Suspense fallback={<p>Loading map...</p>}>
+                {<DynamicGarutMap />}
+              </Suspense>
+            </div>
+          )}
+        </div>
+        {/* tabel */}
+        <div className="flex w-full flex-col justify-center">
+          {dataMap[0] ? (
+            <Suspense fallback={<p>Loading table...</p>}>
+              <Tabel data={dataMap} />
             </Suspense>
-          </div>
-        ) : (
-          <p>Loading map...</p>
-        )}
-      </div>
-      <div className="flex w-full flex-col justify-center">
-        {dataMap.features ? (
-          <Suspense fallback={<p>Loading table...</p>}>
-            <Tabel data={dataMap} />
-          </Suspense>
-        ) : (
-          <p>Loading table...</p>
-        )}
-      </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              {/* tampilkan peta kabupaten garut dengan border  */}
+            </div>
+          )}
+        </div>
+      </BreadcrumbsWrapper>
     </Main>
   );
 };

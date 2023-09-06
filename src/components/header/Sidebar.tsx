@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { FaHome } from 'react-icons/fa';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -60,7 +62,17 @@ export default function Sidebar() {
 
           <ul className="space-y-2 font-medium">
             <li>
-              <a
+              <Link
+                href="/"
+                className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              >
+                <FaHome className="h-6 w-6 text-current" />
+
+                <span className="ml-3">Home</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/datasets"
                 className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
@@ -80,10 +92,10 @@ export default function Sidebar() {
                 </svg>
 
                 <span className="ml-3">Dataset</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="#"
                 className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
@@ -103,10 +115,10 @@ export default function Sidebar() {
                 </svg>
 
                 <span className="ml-3">Metadata</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/opds"
                 className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
@@ -126,10 +138,10 @@ export default function Sidebar() {
                 </svg>
 
                 <span className="ml-3">OPD</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/grupdata"
                 className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
@@ -149,7 +161,7 @@ export default function Sidebar() {
                 </svg>
 
                 <span className="ml-3">Grup Data</span>
-              </a>
+              </Link>
             </li>
             <li>
               <button
@@ -195,36 +207,36 @@ export default function Sidebar() {
                 className={`space-y-2 py-2 ${isDropdownOpen ? '' : 'hidden'}`}
               >
                 <li>
-                  <a
+                  <Link
                     href="/infografik"
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Infografis
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Visualisasi
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/videografik"
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Videografis
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/peta"
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Peta Sebaran
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </li>
