@@ -36,6 +36,7 @@
     "jspdf-autotable": "^3.5.31",
     "leaflet": "^1.9.3",
     "next": "^13.2.4",
+    "next-absolute-url": "^1.2.2",
     "next-seo": "^5.15.0",
     "next-sitemap": "^4.0.6",
     "prop-types": "^15.8.1",

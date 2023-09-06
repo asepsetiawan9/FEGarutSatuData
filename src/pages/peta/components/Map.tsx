@@ -72,10 +72,10 @@ export default function Map({ dataKecamatan }: MapProps) {
     return {
       fillColor: getColor(nilaiValue, range),
       weight: 1,
-      opacity: 1,
+      opacity: 2,
       color: '#777', // warna border
       dashArray: '3',
-      fillOpacity: 0.8,
+      fillOpacity: 0.9,
       // feature._leaflet_pos || new Point(0, 0),
     };
     // return el._leaflet_pos || new Point(0, 0);
@@ -88,10 +88,15 @@ export default function Map({ dataKecamatan }: MapProps) {
         layer.setStyle({ color: '#232323', weight: 3 });
         layer
           .bindPopup(
-            `<b>${feature.properties.judulData}</b> <br />
-            <b>${feature.properties.kecamatan}</b><br />
+            `Judul Data : <b> ${feature.properties.judulData}</b> <br />
+            Kecamatan : <b> ${feature.properties.kecamatan}</b><br />
+            Kabupaten : <b> Garut</b><br />
              Total : ${feature.properties.nilai}<br />
-             Keterangan : Tidak Ada Keterangan`
+             Keterangan: ${
+               feature.properties.nilai === null
+                 ? feature.properties.keterangan
+                 : 'Tidak Ada Keterangan'
+             }`
           )
           .openPopup();
       },
@@ -157,7 +162,7 @@ export default function Map({ dataKecamatan }: MapProps) {
 
   return (
     <>
-      <MapContainer className="z-0" center={center} zoom={12}>
+      <MapContainer className="z-0" center={center} zoom={11}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

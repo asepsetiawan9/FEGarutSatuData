@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import router from 'next/router';
 import React, { Suspense, useEffect, useState } from 'react';
 import { FiColumns } from 'react-icons/fi';
-import { ColorRing } from 'react-loader-spinner';
 
 import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
@@ -21,6 +20,10 @@ const Index = () => {
   const [data, setData] = useState<PetaDataType[]>([]);
   const [, setIsLoading] = useState(true);
   const MapWithNoSSR = dynamic(() => import('./components/Map'), {
+    ssr: false,
+    loading: () => <p>Loading map...</p>,
+  });
+  const DynamicGarutMap = dynamic(() => import('./components/GarutMap'), {
     ssr: false,
     loading: () => <p>Loading map...</p>,
   });
@@ -86,7 +89,11 @@ const Index = () => {
               </Suspense>
             </div>
           ) : (
-            <p>Loading map...</p>
+            <div id="map" className="w-full">
+              <Suspense fallback={<p>Loading map...</p>}>
+                {<DynamicGarutMap />}
+              </Suspense>
+            </div>
           )}
         </div>
         {/* tabel */}
@@ -97,13 +104,7 @@ const Index = () => {
             </Suspense>
           ) : (
             <div className="flex items-center justify-center">
-              <ColorRing
-                visible={true}
-                height={80}
-                width={80}
-                ariaLabel="blocks-loading"
-                colors={['#b8c480', '#B2A3B5', '#F4442E', '#51E5FF', '#429EA6']}
-              />
+              {/* tampilkan peta kabupaten garut dengan border  */}
             </div>
           )}
         </div>

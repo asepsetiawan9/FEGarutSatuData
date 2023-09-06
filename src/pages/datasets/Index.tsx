@@ -26,9 +26,15 @@ type YourDataType = {
     name: string;
   };
 };
+type GrupType = string;
+type OpdType = string;
 const Index = () => {
   const [data, setData] = useState<YourDataType[]>([]);
   const [searchResults, setSearchResults] = useState<YourDataType[]>([]);
+  const [allOpd, setAllOpd] = useState<OpdType[]>([]);
+  const [allGrup, setAllGrup] = useState<GrupType[]>([]);
+  const [selectedOpd, setSelectedOpd] = useState<string>('');
+  const [selectedGrup, setSelectedGrup] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState('Filter');
   const [show, setShow] = useState(8);
@@ -101,7 +107,12 @@ const Index = () => {
     const fetchData = async () => {
       try {
         const response = await http().get('/datasets');
-        setData(response.data);
+        const resultOpd = response.data.opd;
+        const resultGrup = response.data.grup;
+        setData(response.data.datasets);
+
+        setAllOpd(resultOpd.all_opd);
+        setAllGrup(resultGrup.all_grup);
       } catch (error) {
         // console.error(error);
       }
@@ -268,22 +279,36 @@ const Index = () => {
               />
             </div>
             <div className="relative col-span-2 w-full">
-              <input
-                type="text"
+              <select
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-3 text-sm text-gray-900 focus:outline-[#fa65b1]"
-                placeholder="Pilih OPD"
+                value={selectedOpd}
                 onChange={handleSearchOpd}
-              />
+              >
+                <option value="">Pilih Opd</option>
+
+                {allOpd.map((grup, index) => (
+                  <option key={index} value={grup}>
+                    {grup}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="relative col-span-2 w-full">
-              <input
-                type="text"
+              <select
                 id="search"
                 className="block w-full rounded-lg border border-[#acacac] bg-gray-50 p-1.5 pl-3 text-sm text-gray-900 focus:outline-[#fa65b1]"
-                placeholder="Pilih Sektoral"
+                value={selectedGrup}
                 onChange={handleSearchSektoral}
-              />
+              >
+                <option value="">Pilih Sektoral</option>
+
+                {allGrup.map((grup, index) => (
+                  <option key={index} value={grup}>
+                    {grup}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="flex flex-row justify-between">
