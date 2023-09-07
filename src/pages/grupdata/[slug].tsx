@@ -59,7 +59,6 @@ const GroupData = () => {
         setData(resultData);
         setAllGrup(resultGrup);
         setIsLoading(false);
-        // Set searchResults ke data awal dari server
       } catch (error) {
         setIsLoading(false);
         // when error
@@ -91,11 +90,6 @@ const GroupData = () => {
   }
 
   // const data = data.find((item) => item.slug === slug);
-  const totalPageCount = Math.ceil((data?.dataset?.length || 0) / itemsPerPage);
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedDataset = data?.dataset?.slice(startIndex, endIndex);
 
   const handlePageChange = (pageNumber: React.SetStateAction<number>) => {
     setCurrentPage(pageNumber);
@@ -108,28 +102,39 @@ const GroupData = () => {
   const handleOpdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOpd(event.target.value);
   };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
+  const handleSortMethodChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSortMethod(event.target.value);
+  };
 
-  const filteredDataset = paginatedDataset?.filter((item) =>
-    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter pencarian
+  const filterBySearch = (dataset: DatasetType[]) => {
+    return dataset.filter((item) =>
+      item.judul.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
 
-  const filteredByOpd = filteredDataset?.filter(
-    (item) => selectedOpd === '' || item.opd.name === selectedOpd
-  );
-
-  // sort data
+  // Filter OPD
+  const filterByOpd = (dataset: DatasetType[]) => {
+    return dataset.filter(
+      (item) => selectedOpd === '' || item.opd.name === selectedOpd
+    );
+  };
+  /// sort data by popularity
   const sortDatasetByPopularity = (dataset: DatasetType[]) => {
     return dataset.slice().sort((a, b) => {
       const viewCountA = parseInt(a.count_view as string, 10) || 0;
       const viewCountB = parseInt(b.count_view as string, 10) || 0;
-
       return viewCountB - viewCountA;
     });
   };
 
+  // sort data by date
   const sortDatasetByDate = (dataset: DatasetType[]) => {
     return dataset.slice().sort((a, b) => {
       const dateA = new Date(a.date_upload as string).getTime();
@@ -138,21 +143,37 @@ const GroupData = () => {
     });
   };
 
-  const handleSortMethodChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSortMethod(event.target.value);
+  const applySorting = (dataset: DatasetType[] | undefined) => {
+    if (!dataset) {
+      return [];
+    }
+
+    let sortedDataset = [...dataset];
+
+    if (sortMethod === 'Terpopuler') {
+      sortedDataset = sortDatasetByPopularity(sortedDataset);
+    } else if (sortMethod === 'Terbaru') {
+      sortedDataset = sortDatasetByDate(sortedDataset);
+    }
+
+    return sortedDataset;
   };
 
-  let sortedDataset = [...filteredByOpd];
+  // Kemudian di tempat yang sesuai dalam kode Anda
+  const filteredDataset = applySorting(
+    filterBySearch(filterByOpd(data?.dataset))
+  );
 
-  if (sortMethod === 'Terpopuler') {
-    sortedDataset = sortDatasetByPopularity(sortedDataset);
-  } else if (sortMethod === 'Terbaru') {
-    sortedDataset = sortDatasetByDate(sortedDataset);
-  }
-  const jumlahData = sortedDataset ? sortedDataset.length : 0;
-  // console.log(sortedDataset);
+  const totalPageCount = Math.ceil(
+    (filteredDataset?.length || 0) / itemsPerPage
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDataset = filteredDataset.slice(startIndex, endIndex);
+
+  const jumlahData = filteredDataset ? filteredDataset.length : 0;
+
   const handleClickDataset = (slugData: any) => {
     router.push(`/datasets/${slugData}`);
   };
@@ -241,7 +262,7 @@ const GroupData = () => {
                   id="underline_select"
                   className="peer block w-full appearance-none border-0 border-b-2 border-[#acacac] bg-transparent px-3 py-2 text-gray-500 focus:border-[#acacac] focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
                   value={sortMethod}
-                  onChange={handleSortMethodChange}
+                  onChange={handleSortMethodChange} // Menggunakan handleSortMethodChange sebagai handler onChange
                 >
                   <option value="Terbaru">Terbaru</option>
                   <option value="Terpopuler">Terpopuler</option>
@@ -250,7 +271,7 @@ const GroupData = () => {
             </div>
           </div>
           <div className="flex flex-col gap-5 pt-4">
-            {sortedDataset?.map((item) => {
+            {paginatedDataset?.map((item) => {
               const cleanedDeskripsi = item.deskripsi
                 .replace(/_x000D_/g, '')
                 .replace(/â€‹/g, '')
