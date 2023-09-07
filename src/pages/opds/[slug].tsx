@@ -88,14 +88,6 @@ const Opds = () => {
     return <p>Data not available.</p>; // Show message if data is null
   }
 
-  const totalPageCount = Math.ceil(
-    (selectedData?.dataset?.length || 0) / itemsPerPage
-  );
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedDataset = selectedData?.dataset?.slice(startIndex, endIndex);
-
   const handlePageChange = (pageNumber: React.SetStateAction<number>) => {
     setCurrentPage(pageNumber);
   };
@@ -107,19 +99,28 @@ const Opds = () => {
   const handleGrupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGrup(event.target.value);
   };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredDataset = paginatedDataset.filter((item) =>
-    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDataset = selectedData?.dataset?.filter((item) => {
+    const includesSearchQuery = item.judul
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const isGrupMatch = selectedGrup === '' || item.grup_name === selectedGrup;
+    return includesSearchQuery && isGrupMatch;
+  });
+
+  const totalPageCount = Math.ceil(
+    (filteredDataset?.length || 0) / itemsPerPage
   );
 
-  const filteredByGrup = filteredDataset.filter(
-    (item) => selectedGrup === '' || item.grup_name === selectedGrup
-  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDataset = filteredDataset?.slice(startIndex, endIndex);
 
-  const jumlahData = filteredByGrup ? filteredByGrup.length : 0;
+  const jumlahData = filteredDataset ? filteredDataset.length : 0;
 
   const handleClickDataset = (slugData: any) => {
     router.push(`/datasets/${slugData}`);
@@ -247,7 +248,7 @@ const Opds = () => {
             </div> */}
           </div>
           <div className="flex flex-col gap-5 pt-4">
-            {filteredByGrup.map((item) => {
+            {paginatedDataset.map((item) => {
               // Membersihkan karakter "_x000D_" dari deskripsi
               const cleanedDeskripsi = item.deskripsi
                 .replace(/_x000D_/g, '')
@@ -338,6 +339,7 @@ const Opds = () => {
               </div>
               <span>Menampilkan data dari</span>
             </div>
+
             <div className="mt-4 flex justify-center">
               <ul className="flex gap-2">
                 {currentPage > 1 && (

@@ -1,6 +1,7 @@
 /* eslint-disable tailwindcss/migration-from-tailwind-2 */
 import React, { useEffect, useState } from 'react';
 import { FiPackage, FiUser } from 'react-icons/fi';
+import { ColorRing } from 'react-loader-spinner';
 
 import BreadcrumbsWrapper from '@/components/Breadcrumbs';
 import http from '@/helpers/http';
@@ -46,7 +47,7 @@ const Index = () => {
   const [selectedGrup, setSelectedGrup] = useState('');
   const [allOpd, setAllOpd] = useState<OpdType[]>([]);
   const [allGrup, setAllGrup] = useState<GrupType[]>([]);
-  const [, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +68,22 @@ const Index = () => {
 
     fetchData();
   }, []);
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex items-center justify-center">
+          <ColorRing
+            visible={true}
+            height={80}
+            width={80}
+            ariaLabel="blocks-loading"
+            colors={['#b8c480', '#B2A3B5', '#F4442E', '#51E5FF', '#429EA6']}
+          />
+        </div>
+      </div>
+    );
+  }
+
   // console.log(data.grup);
   const filteredResults = data.filter((item) => {
     // Filter berdasarkan keyword pencarian

@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 
-const UrlBackEnd = 'http://192.168.1.107:8000/api';
+const UrlBackEnd = 'http://127.0.0.1:8000/api';
 const http = () => {
   const headers = {};
 
