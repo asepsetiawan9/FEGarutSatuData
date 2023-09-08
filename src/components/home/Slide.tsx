@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import { FiGrid, FiPackage, FiUser } from 'react-icons/fi';
+import { FiGrid, FiPackage, FiUser, FiX } from 'react-icons/fi';
 import { ColorRing } from 'react-loader-spinner';
 
 import http from '../../helpers/http';
@@ -160,18 +160,49 @@ export default function Slide({ sliderData }: SlideProps) {
   }, [searchQuery]);
 
   // Function to handle the download button click
-  const handleDownloadClick = (infografis: InfografisItem) => {
-    const link = document.createElement('a');
-    link.href = infografis.gambar;
-    link.download = infografis.name;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.click();
+  // const handleDownloadClick = (infografis: InfografisItem) => {
+  //   const link = document.createElement('a');
+  //   link.href = infografis.gambar;
+  //   link.download = infografis.name;
+  //   link.target = '_blank';
+  //   link.rel = 'noopener noreferrer';
+  //   link.click();
+  // };
+  const download = (filename, content) => {
+    const element = document.createElement('a');
+    element.setAttribute('href', content);
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  };
+
+  const handleDownload = async (imageUrl) => {
+    console.log(imageUrl);
+
+    try {
+      const result = await fetch(imageUrl, {
+        method: 'GET',
+        headers: {},
+      });
+      const blob = await result.blob();
+      const url = URL.createObjectURL(blob);
+      download('image.png', url); // Ganti 'image.png' sesuai dengan nama file yang Anda inginkan
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleLihatClick = (infografis: InfografisItem) => {
     setSelectedItem(infografis);
     setShowModal(true);
+  };
+  const closeModalInfografis = () => {
+    setShowModal(false); // Close the modal
   };
 
   return (
@@ -282,248 +313,22 @@ export default function Slide({ sliderData }: SlideProps) {
               </div>
             </div>
           ) : (
-            // <div className="grid-list px-3">
-            //   {searchResults.map((result, index) => (
-            //     <div key={index} className="grid-item">
-            //       {result.dataset && result.dataset.length > 0 && (
-            //         <>
-            //           <div className="py-3">
-            //             <strong>Dataset:</strong>
-            //           </div>
-            //           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
-            //             {result.dataset.map((dataset) => (
-            //               <a
-            //                 key={dataset.id}
-            //                 href={`datasets/${dataset.id}`}
-            //                 className="no-underline decoration-black hover:no-underline"
-            //               >
-            //                 <div className="grid grid-cols-4 gap-2 rounded-md shadow-md">
-            //                   <div>
-            //                     <img
-            //                       src="/imgdataset.png"
-            //                       alt={dataset.judul}
-            //                       className="h-[120px] w-full rounded-md object-cover pl-3"
-            //                       style={{ objectFit: 'contain' }}
-            //                     />
-            //                   </div>
-            //                   <div className="col-span-3 flex flex-col justify-between px-3">
-            //                     <div>
-            //                       <p className="!my-1 text-base font-bold">
-            //                         {dataset.judul}
-            //                       </p>
-            //                     </div>
-            //                     <div className="my-2 flex flex-row justify-between gap-5">
-            //                       <div className="flex flex-row gap-2 text-sm">
-            //                         <FiUser className="mt-1" />
-            //                         <span>{dataset.opd?.name || ''}</span>
-            //                       </div>
-            //                       <div className="flex flex-row gap-2 text-sm">
-            //                         <FiGrid className="mt-1" />
-            //                         <span>{dataset.grup?.name || ''}</span>
-            //                       </div>
-            //                     </div>
-            //                   </div>
-            //                 </div>
-            //               </a>
-            //             ))}
-            //           </div>
-            //         </>
-            //       )}
-            //       {result.grup && result.grup.length > 0 && (
-            //         <>
-            //           <div className="my-3">
-            //             <strong>Grup:</strong>
-            //           </div>
-            //           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            //             {result.grup.map((grup) => (
-            //               <a
-            //                 key={grup.id}
-            //                 href={`grup/${grup.slug}`}
-            //                 className="no-underline decoration-black hover:no-underline"
-            //               >
-            //                 <div className="rounded-lg bg-white p-4 shadow-lg ">
-            //                   <img
-            //                     src={
-            //                       grup.gambar
-            //                         ? grup.gambar
-            //                         : 'https://garutkab.go.id/assets/img/no-image.jpeg'
-            //                     }
-            //                     alt={grup.name}
-            //                     className="mb-4 h-[120px] w-full rounded-md object-contain"
-            //                   />
-            //                   <div className="text-center">
-            //                     <p className="!my-1 text-base font-bold">
-            //                       {grup.name}
-            //                     </p>
-            //                   </div>
-            //                 </div>
-            //               </a>
-            //             ))}
-            //           </div>
-            //         </>
-            //       )}
-            //       {result.visualisasi && result.visualisasi.length > 0 && (
-            //         <>
-            //           <div className="my-3">
-            //             <strong>Visualisasi:</strong>
-            //           </div>
-            //           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            //             {result.visualisasi.map((visualisasi) => (
-            //               <a
-            //                 key={visualisasi.id}
-            //                 href={`visualisasi/${visualisasi.slug}`}
-            //                 className="no-underline decoration-black hover:no-underline"
-            //               >
-            //                 <div className="rounded-lg bg-white p-4 shadow-lg ">
-            //                   <img
-            //                     src={
-            //                       visualisasi.gambar
-            //                         ? visualisasi.gambar
-            //                         : 'https://garutkab.go.id/assets/img/no-image.jpeg'
-            //                     }
-            //                     alt={visualisasi.name}
-            //                     className="mb-4 h-[120px] w-full rounded-md object-contain"
-            //                   />
-            //                   <div className="text-center">
-            //                     <p className="!my-1 text-base font-bold">
-            //                       {visualisasi.name}
-            //                     </p>
-            //                   </div>
-            //                 </div>
-            //               </a>
-            //             ))}
-            //           </div>
-            //         </>
-            //       )}
-
-            //       {result.infografis && result.infografis.length > 0 && (
-            //         <>
-            //           <div className="my-3">
-            //             <strong>Infografis:</strong>
-            //           </div>
-            //           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-            //             {result.infografis.map((infografis) => (
-            //               <div className="grid grid-cols-1 gap-2 rounded-md shadow-md">
-            //                 <div key={infografis.id}>
-            //                   <img
-            //                     alt={infografis.name}
-            //                     src={
-            //                       infografis.gambar
-            //                         ? infografis.gambar
-            //                         : 'https://garutkab.go.id/assets/img/no-image.jpeg'
-            //                     }
-            //                     className=" w-full rounded-md object-cover"
-            //                     loading="lazy"
-            //                   />
-            //                   <p className="!my-1 px-2 py-1 text-center text-base font-bold">
-            //                     {infografis.name}
-            //                   </p>
-            //                   {typeof infografis.desc === 'string' && (
-            //                     <div
-            //                       className="px-2 text-sm"
-            //                       dangerouslySetInnerHTML={{
-            //                         __html: infografis.desc,
-            //                       }}
-            //                     />
-            //                   )}
-            //                   <div className="flex flex-row gap-1 px-2 py-1 align-bottom text-sm">
-            //                     <FiUser className="mt-1 " />
-            //                     <span>{}</span>
-            //                     {infografis.opd ? (
-            //                       <span>{infografis.opd.name}</span>
-            //                     ) : (
-            //                       <span> - </span>
-            //                     )}
-            //                   </div>
-            //                   <div className="flex flex-row gap-1 px-2 py-1 align-bottom text-sm">
-            //                     <FiPackage className="mt-1 " />
-            //                     <span>{}</span>
-            //                     {infografis.grup ? (
-            //                       <span>{infografis.grup.name}</span>
-            //                     ) : (
-            //                       <span> - </span>
-            //                     )}
-            //                   </div>
-            //                   <div className="flex justify-between px-4 py-2 text-sm">
-            //                     <button
-            //                       className="flex w-24 items-center justify-center rounded-md bg-[#E8AEE2] px-2 py-1 font-bold text-black"
-            //                       onClick={() => handleLihatClick(infografis)}
-            //                     >
-            //                       <span>Lihat</span>
-            //                     </button>
-            //                     <button
-            //                       className="flex w-24  items-center justify-center rounded-md bg-[#AEE8B4] px-2 py-1 font-bold text-black"
-            //                       onClick={() =>
-            //                         handleDownloadClick(infografis)
-            //                       }
-            //                     >
-            //                       <span>Download</span>
-            //                     </button>
-            //                   </div>
-            //                 </div>
-            //               </div>
-            //             ))}
-            //             {selectedItem && showModal && (
-            //               <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
-            //                 <div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-2 text-sm">
-            //                   <img
-            //                     alt={selectedItem.name}
-            //                     src={selectedItem.gambar}
-            //                     className={`modal-image${
-            //                       zoomed ? ' zoomed' : ''
-            //                     } rounded`}
-            //                     onClick={() => setZoomed(!zoomed)}
-            //                   />
-            //                   <div className="py-1 text-center font-bold">
-            //                     {selectedItem.name}
-            //                   </div>
-            //                   <div className="my-1">{selectedItem.desc}</div>
-            //                   <div className="pt-2">
-            //                     <div className="flex flex-row gap-1 align-bottom text-sm">
-            //                       <FiUser className="mt-1 " />
-            //                       <span>{}</span>
-            //                       {selectedItem.opd ? (
-            //                         <span>{selectedItem.opd.name}</span>
-            //                       ) : (
-            //                         <span> - </span>
-            //                       )}
-            //                     </div>
-            //                   </div>
-            //                   <div className="flex flex-row gap-1 align-bottom text-sm">
-            //                     <FiPackage className="mt-1 " />
-            //                     <span>{}</span>
-            //                     {selectedItem.grup ? (
-            //                       <span>{selectedItem.name}</span>
-            //                     ) : (
-            //                       <span> - </span>
-            //                     )}
-            //                   </div>
-            //                   <div className="flex justify-end">
-            //                     <button
-            //                       className="rounded-md bg-[#AEE8B4] px-2 py-1 font-bold text-black"
-            //                       onClick={() => setShowModal(false)}
-            //                     >
-            //                       Tutup
-            //                     </button>
-            //                   </div>
-            //                 </div>
-            //               </div>
-            //             )}
-            //           </div>
-            //         </>
-            //       )}
-            //     </div>
-            //   ))}
-            // </div>
             <div>
               {isModalOpen && (
                 <div
                   className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 "
-                  onClick={closeModal}
+                  // onClick={closeModal}
                 >
                   <div className=" max-h-screen  overflow-y-scroll rounded-md bg-white p-[20px] sm:h-[80%] sm:w-[80%] md:h-[60%] md:w-[60%] lg:h-[80%] lg:w-[80%]">
-                    {/* Modal Content */}
                     <div className="grid-list px-3">
+                      <div className=" flex justify-end">
+                        <span
+                          className=" absolute cursor-pointer text-red-600 hover:text-gray-900"
+                          onClick={closeModal}
+                        >
+                          <FiX size={24} />
+                        </span>
+                      </div>
                       {searchResults.map((result, index) => (
                         <div key={index} className="grid-item">
                           {result.dataset && result.dataset.length > 0 && (
@@ -535,7 +340,7 @@ export default function Slide({ sliderData }: SlideProps) {
                                 {result.dataset.map((dataset) => (
                                   <a
                                     key={dataset.id}
-                                    href={`datasets/${dataset.id}`}
+                                    href={`datasets/${dataset.slug}`}
                                     className="no-underline decoration-black hover:no-underline"
                                   >
                                     <div className="grid grid-cols-4 gap-2 rounded-md shadow-md">
@@ -583,7 +388,7 @@ export default function Slide({ sliderData }: SlideProps) {
                                 {result.grup.map((grup) => (
                                   <a
                                     key={grup.id}
-                                    href={`grup/${grup.slug}`}
+                                    href={`grupdata/${grup.slug}`}
                                     className="no-underline decoration-black hover:no-underline"
                                   >
                                     <div className="rounded-lg bg-white p-4 shadow-lg ">
@@ -702,10 +507,10 @@ export default function Slide({ sliderData }: SlideProps) {
                                             <span>Lihat</span>
                                           </button>
                                           <button
-                                            className="flex w-24  items-center justify-center rounded-md bg-[#AEE8B4] px-2 py-1 font-bold text-black"
                                             onClick={() =>
-                                              handleDownloadClick(infografis)
+                                              handleDownload(infografis.gambar)
                                             }
+                                            className="flex w-24 items-center justify-center rounded-md bg-[#AEE8B4] px-2 py-1 font-bold text-black"
                                           >
                                             <span>Download</span>
                                           </button>
@@ -716,6 +521,14 @@ export default function Slide({ sliderData }: SlideProps) {
                                   {selectedItem && showModal && (
                                     <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
                                       <div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-2 text-sm">
+                                        <div className=" flex justify-end">
+                                          <span
+                                            className=" absolute cursor-pointer text-red-600 hover:text-gray-900"
+                                            onClick={closeModalInfografis}
+                                          >
+                                            <FiX size={24} />
+                                          </span>
+                                        </div>
                                         <img
                                           alt={selectedItem.name}
                                           src={selectedItem.gambar}

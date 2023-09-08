@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaImages, FaMapMarkedAlt } from 'react-icons/fa';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -164,6 +164,24 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
+              <Link
+                href="/infografik"
+                className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              >
+                <FaImages className="h-6 w-6 text-current" />
+                <span className="ml-3">Infografis</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/peta"
+                className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              >
+                <FaMapMarkedAlt className="h-6 w-6 text-current" />
+                <span className="ml-3"> Peta Sebaran</span>
+              </Link>
+            </li>
+            <li>
               <button
                 type="button"
                 className="group flex w-full items-center rounded-lg p-2 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 "
@@ -208,14 +226,6 @@ export default function Sidebar() {
               >
                 <li>
                   <Link
-                    href="/infografik"
-                    className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Infografis
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="#"
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
@@ -228,14 +238,6 @@ export default function Sidebar() {
                     className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Videografis
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/peta"
-                    className="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Peta Sebaran
                   </Link>
                 </li>
               </ul>

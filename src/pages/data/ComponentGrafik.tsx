@@ -56,23 +56,6 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
     const numericValue = parseFloat(cleanedValue);
     return Number.isNaN(numericValue) ? undefined : numericValue;
   };
-  const handleChangeAxisB = (event: { target: { value: any } }) => {
-    const selectedIndex = event.target.value;
-    const numericValue = cleanAndConvertToNumber(selectedIndex);
-    setLabelFilterB(numericValue !== undefined ? numericValue.toString() : '');
-  };
-
-  const handleChangeAxisC = (event: { target: { value: any } }) => {
-    const selectedIndex = event.target.value;
-    const numericValue = cleanAndConvertToNumber(selectedIndex);
-    setLabelFilterC(numericValue !== undefined ? numericValue.toString() : '');
-  };
-
-  const handleChangeAxisD = (event: { target: { value: any } }) => {
-    const selectedIndex = event.target.value;
-    const numericValue = cleanAndConvertToNumber(selectedIndex);
-    setLabelFilterD(numericValue !== undefined ? numericValue.toString() : '');
-  };
 
   const handleToggleAxisC = () => {
     setShowAxisC(!showAxisC);
@@ -97,21 +80,48 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
     return color;
   };
 
-  const datasetOptions = {
-    backgroundColor:
-      chartType === 'Pie'
-        ? dataChart.map(() => getRandomColor())
-        : getRandomColor(),
-    borderColor:
-      chartType === 'Pie'
-        ? dataChart.map(() => getRandomColor())
-        : getRandomColor(),
-    borderWidth: 1,
+  const [axisBColor, setAxisBColor] = useState(getRandomColor());
+  const [axisCColor, setAxisCColor] = useState(getRandomColor());
+  const [axisDColor, setAxisDColor] = useState(getRandomColor());
+  const handleChangeAxisB = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterB(numericValue !== undefined ? numericValue.toString() : '');
+    setAxisBColor(getRandomColor()); // Perbarui warna untuk axis B
   };
 
+  const handleChangeAxisC = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterC(numericValue !== undefined ? numericValue.toString() : '');
+    setAxisCColor(getRandomColor()); // Perbarui warna untuk axis C
+  };
+
+  const handleChangeAxisD = (event: { target: { value: any } }) => {
+    const selectedIndex = event.target.value;
+    const numericValue = cleanAndConvertToNumber(selectedIndex);
+    setLabelFilterD(numericValue !== undefined ? numericValue.toString() : '');
+    setAxisDColor(getRandomColor()); // Perbarui warna untuk axis D
+  };
+  // const datasetOptions = {
+  //   backgroundColor:
+  //     chartType === 'Pie'
+  //       ? dataChart.map(() => getRandomColor())
+  //       : getRandomColor(),
+  //   borderColor:
+  //     chartType === 'Pie'
+  //       ? dataChart.map(() => getRandomColor())
+  //       : getRandomColor(),
+  //   borderWidth: 1,
+  // };
+
   const allDatasets = [labelFilterB, labelFilterC, labelFilterD].map(
-    (axisIndex) => {
+    (axisIndex, index) => {
       const label = dataRowChart[axisIndex];
+      const color =
+        // eslint-disable-next-line no-nested-ternary
+        index === 0 ? axisBColor : index === 1 ? axisCColor : axisDColor;
+
       return {
         label,
         data: dataChart.map(
@@ -121,7 +131,9 @@ const ComponentGrafik: React.FC<ComponentGrafikProps> = ({ data }) => {
             return cleanAndConvertToNumber(value);
           }
         ),
-        ...datasetOptions,
+        backgroundColor: color, // Gunakan warna yang sesuai
+        borderColor: color, // Gunakan warna yang sesuai
+        borderWidth: 1,
       };
     }
   );

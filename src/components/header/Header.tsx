@@ -32,13 +32,13 @@ export default function Header() {
     { title: 'Metadata', url: '/#' },
     { title: 'OPD', url: '/opds' },
     { title: 'Grup Data', url: '/grupdata' },
+    { title: 'Infografis', url: '/infografik' },
+    { title: 'Peta Sebaran', url: '/peta' },
     {
       title: 'Fitur Lainnya',
       subItems: [
         { title: 'Visualisasi', url: '/#' },
-        { title: 'Infografis', url: '/infografik' },
         { title: 'Videografis', url: '/videografik' },
-        { title: 'Peta Sebaran', url: '/peta' },
       ],
     },
   ];
@@ -63,9 +63,9 @@ export default function Header() {
       <div className="mx-auto shadow-md">
         <div
           // eslint-disable-next-line tailwindcss/no-custom-classname
-          className={`flex max-w-screen-xl py-10 ${
+          className={`flex max-w-screen-xl py-8 ${
             animateHeader && 'py-5'
-          } trasition mx-auto items-center justify-between px-16 duration-500 ease-in-out`}
+          } trasition mx-auto items-center justify-between px-3 duration-500 ease-in-out`}
         >
           <Link className="hover:border-none" href="/">
             <img

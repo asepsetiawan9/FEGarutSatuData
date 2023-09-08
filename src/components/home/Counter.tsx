@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import CountUp from 'react-countup';
 import { FiArrowRight } from 'react-icons/fi';
 
@@ -31,12 +32,14 @@ export default function Counter({ data }: { data: CounterData }) {
           <div className="flex-1 text-sm">
             Kumpulan data-data berupa tabel yang dapat diolah lebih lanjut.
           </div>
-          <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
-            <span className="hover:text-white">Lihat selengkapnya</span>
-            <div className="self-center">
-              <FiArrowRight />
+          <Link href={'/datasets'}>
+            <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
+              <span className="hover:text-white">Lihat selengkapnya</span>
+              <div className="self-center">
+                <FiArrowRight />
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
@@ -51,12 +54,14 @@ export default function Counter({ data }: { data: CounterData }) {
             Organisasi Perangkat Daerah yang datanya dipublikasikan di Satu Data
             Garut.
           </div>
-          <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
-            <span className="hover:text-white">Lihat selengkapnya</span>
-            <div className="self-center">
-              <FiArrowRight />
+          <Link href={'/opds'}>
+            <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
+              <span className="hover:text-white">Lihat selengkapnya</span>
+              <div className="self-center">
+                <FiArrowRight />
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
@@ -70,12 +75,14 @@ export default function Counter({ data }: { data: CounterData }) {
           <div className="flex-1 text-sm">
             Gambaran Informasi data tertentu dalam bentuk visual.
           </div>
-          <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
-            <span className="hover:text-white">Lihat selengkapnya</span>
-            <div className="self-center">
-              <FiArrowRight />
+          <Link href={'/#'}>
+            <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
+              <span className="hover:text-white">Lihat selengkapnya</span>
+              <div className="self-center">
+                <FiArrowRight />
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="flex w-full flex-col gap-2 rounded-md border p-2 text-center shadow-md">
           <CountUp
@@ -90,12 +97,14 @@ export default function Counter({ data }: { data: CounterData }) {
             Informasi yang akan disajikan dalam bentuk grafik yang akan
             mempermudah memahami data.
           </div>
-          <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
-            <span className="hover:text-white">Lihat selengkapnya</span>
-            <div className="self-center">
-              <FiArrowRight />
+          <Link href={'/infografik'}>
+            <div className="flex cursor-pointer flex-row justify-center gap-1.5 rounded-md bg-[#dddddd] py-1.5 text-base hover:bg-primary hover:text-white">
+              <span className="hover:text-white">Lihat selengkapnya</span>
+              <div className="self-center">
+                <FiArrowRight />
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
