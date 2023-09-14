@@ -29,7 +29,14 @@ export default function Header() {
       title: 'Dataset',
       url: '/datasets',
     },
-    { title: 'Metadata', url: '/#' },
+    {
+      title: 'Metadata',
+      subItems: [
+        { title: 'Kegiatan', url: '/metadata-kegiatan' },
+        { title: 'Variabel', url: '/metadata-variabel' },
+        { title: 'Indikator', url: '/metadata-indikator' },
+      ],
+    },
     { title: 'OPD', url: '/opds' },
     { title: 'Grup Data', url: '/grupdata' },
     { title: 'Infografis', url: '/infografik' },

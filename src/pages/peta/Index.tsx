@@ -131,9 +131,7 @@ const Index = () => {
         >
           <div
             className={`col-span-1 rounded border p-2 ${
-              showSecondMap || showThirdMap || showFourthMap
-                ? ''
-                : 'h-screen w-full'
+              showSecondMap || showThirdMap || showFourthMap ? '' : ' w-full'
             }`}
           >
             <div className="py-3">

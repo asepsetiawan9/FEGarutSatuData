@@ -96,7 +96,7 @@ export default function Sidebar() {
             </li>
             <li>
               <Link
-                href="#"
+                href="/metadata"
                 className="flex items-center rounded-lg p-2 text-gray-900 hover:border-[#fa65b1] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 <svg

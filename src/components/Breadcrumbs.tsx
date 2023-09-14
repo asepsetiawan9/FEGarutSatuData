@@ -8,7 +8,8 @@ import { FiHome } from 'react-icons/fi';
 type BreadcrumbsProps = WithRouterProps;
 
 function Breadcrumbs({ router }: BreadcrumbsProps) {
-  const folderName = router.pathname.split('/')[1];
+  const folderName = router?.pathname?.split('/')[1].replace(/-/g, ' ');
+
   const breadcrumbItems = [];
   breadcrumbItems.push(
     <div
