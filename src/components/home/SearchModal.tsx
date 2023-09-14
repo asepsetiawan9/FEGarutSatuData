@@ -1,21 +1,20 @@
 /* eslint-disable react/jsx-key */
+import Link from 'next/link';
 import React from 'react';
 import { FiGrid, FiPackage, FiUser } from 'react-icons/fi';
 
 const SearchModal = ({ searchResults, onClose }) => {
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
-        <div className="grid-container pb-5">
+    <div>
+      <div className="content">
+        <span onClick={onClose}>&times;</span>
+        <div className="container pb-5">
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <div className="grid-list px-3">
+            <div className=" px-3">
               {searchResults.map((result, index) => (
-                <div key={index} className="grid-item">
+                <div key={index}>
                   {result.dataset && result.dataset.length > 0 && (
                     <>
                       <div className="py-3">
@@ -23,9 +22,9 @@ const SearchModal = ({ searchResults, onClose }) => {
                       </div>
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
                         {result.dataset.map((dataset) => (
-                          <a
+                          <Link
                             key={dataset.id}
-                            href={`datasets/${dataset.id}`}
+                            href={`datasets/${dataset.slug}`}
                             className="no-underline decoration-black hover:no-underline"
                           >
                             <div className="grid grid-cols-4 gap-2 rounded-md shadow-md">
@@ -55,7 +54,7 @@ const SearchModal = ({ searchResults, onClose }) => {
                                 </div>
                               </div>
                             </div>
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </>
@@ -69,7 +68,7 @@ const SearchModal = ({ searchResults, onClose }) => {
                         {result.grup.map((grup) => (
                           <a
                             key={grup.id}
-                            href={`grup/${grup.slug}`}
+                            href={`grupdata/${grup.slug}`}
                             className="no-underline decoration-black hover:no-underline"
                           >
                             <div className="rounded-lg bg-white p-4 shadow-lg ">

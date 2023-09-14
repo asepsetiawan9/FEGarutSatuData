@@ -73,25 +73,31 @@ export default function Map({ dataKecamatan }: MapProps) {
       fillColor: getColor(nilaiValue, range),
       weight: 1,
       opacity: 2,
-      color: '#777', // warna border
-      dashArray: '3',
+      color: '#fff', // warna border
+      // dashArray: '3',
       fillOpacity: 0.9,
       // feature._leaflet_pos || new Point(0, 0),
     };
     // return el._leaflet_pos || new Point(0, 0);
   };
+
   const onEachFeature = (feature: any, layer: any) => {
     layer.on({
       mouseover: (event: LeafletMouseEvent) => {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         const layer = event.target;
+        const nilaiAsString = feature.properties.nilai;
+
+        const nilaiAsInteger = parseInt(nilaiAsString, 10);
+
+        const formattedNumber = nilaiAsInteger.toLocaleString();
         layer.setStyle({ color: '#232323', weight: 3 });
         layer
           .bindPopup(
             `Judul Data : <b> ${feature.properties.judulData}</b> <br />
             Kecamatan : <b> ${feature.properties.kecamatan}</b><br />
             Kabupaten : <b> Garut</b><br />
-             Total : ${feature.properties.nilai}<br />
+             Total : ${formattedNumber}<br />
              Keterangan: ${
                feature.properties.nilai === null
                  ? feature.properties.keterangan
@@ -102,7 +108,7 @@ export default function Map({ dataKecamatan }: MapProps) {
       },
 
       mouseout: () => {
-        layer.setStyle({ color: '#777', weight: 1 });
+        layer.setStyle({ color: '#fff', weight: 1 });
         layer.closePopup();
       },
     });
@@ -141,22 +147,27 @@ export default function Map({ dataKecamatan }: MapProps) {
 
   const legend = (
     // eslint-disable-next-line tailwindcss/no-custom-classname
-    <div className="leaflet-bottom leaflet-left mb-2 ml-2 rounded bg-white px-4 py-2">
+    <div className="leaflet-bottom leaflet-left posis mb-2 ml-2 rounded bg-white px-4 py-2">
       <div>Keterangan :</div>
-      {result.range.map((range, index) => (
-        <div key={index}>
-          <i
-            style={{
-              backgroundColor: rangeColors[index],
-              display: 'inline-block',
-              width: '15px',
-              height: '15px',
-              marginRight: '5px',
-            }}
-          ></i>
-          {range}
-        </div>
-      ))}
+      {result.range.map((range, index) => {
+        const [minStr, maxStr] = range.split('-');
+        const min = parseInt(minStr, 10);
+        const max = parseInt(maxStr, 10);
+        return (
+          <div key={index}>
+            <i
+              style={{
+                backgroundColor: rangeColors[index],
+                display: 'inline-block',
+                width: '15px',
+                height: '15px',
+                marginRight: '5px',
+              }}
+            ></i>
+            {`${min.toLocaleString()} - ${max.toLocaleString()}`}
+          </div>
+        );
+      })}
     </div>
   );
 

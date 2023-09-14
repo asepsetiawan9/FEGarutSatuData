@@ -51,6 +51,22 @@ const nextConfig = {
         source: '/datasets', // mau diganti jadi apa ?
         destination: '/datasets/Index', // path lama ?
       },
+      {
+        source: '/datasets', // mau diganti jadi apa ?
+        destination: '/datasets/Index', // path lama ?
+      },
+      {
+        source: '/metadata-kegiatan', // mau diganti jadi apa ?
+        destination: '/metadata-kegiatan/Index', // path lama ?
+      },
+      {
+        source: '/metadata-variabel', // mau diganti jadi apa ?
+        destination: '/metadata-variabel/Index', // path lama ?
+      },
+      {
+        source: '/metadata-indikator', // mau diganti jadi apa ?
+        destination: '/metadata-indikator/Index', // path lama ?
+      },
       // {
       //   source: '/datasets/:slug',
       //   destination: '/datasets/[slug]',

@@ -9,7 +9,7 @@ import http from '@/helpers/http';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-type YourDataType = {
+type DataSetType = {
   image: string;
   id: Key | null | undefined;
   slug: any;
@@ -30,7 +30,7 @@ type YourDataType = {
 type GrupType = string;
 type OpdType = string;
 const Index = () => {
-  const [selectedData, setSelectedData] = useState<YourDataType[]>([]);
+  const [selectedData, setSelectedData] = useState<DataSetType[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [allOpd, setAllOpd] = useState<OpdType[]>([]);
@@ -100,7 +100,7 @@ const Index = () => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
-  const sortDatasetByPopularity = (dataset: YourDataType[]) => {
+  const sortDatasetByPopularity = (dataset: DataSetType[]) => {
     return dataset.slice().sort((a, b) => {
       const viewCountA = parseInt(a.count_view as string, 10) || 0;
       const viewCountB = parseInt(b.count_view as string, 10) || 0;
@@ -109,7 +109,7 @@ const Index = () => {
   };
 
   // sort data by date
-  const sortDatasetByDate = (dataset: YourDataType[]) => {
+  const sortDatasetByDate = (dataset: DataSetType[]) => {
     return dataset.slice().sort((a, b) => {
       const dateA = new Date(a.date_upload as string).getTime();
       const dateB = new Date(b.date_upload as string).getTime();
@@ -148,7 +148,7 @@ const Index = () => {
   const paginatedDataset = sortedDataset?.slice(startIndex, endIndex);
 
   const jumlahData = sortedDataset ? sortedDataset.length : 0;
-  const DescriptionComponent = ({ item }: { item: YourDataType }) => {
+  const DescriptionComponent = ({ item }: { item: DataSetType }) => {
     const cleanedDescription = item.deskripsi.replace(/_x000D_/g, '');
     const truncatedDescription = cleanedDescription.substring(0, 150);
 
@@ -160,7 +160,7 @@ const Index = () => {
     );
   };
 
-  const RangeYearsComponent = ({ item }: { item: YourDataType }) => {
+  const RangeYearsComponent = ({ item }: { item: DataSetType }) => {
     const truncatedText = `${item.range_years} (${item.jumlah_data})`;
 
     return <span>{truncatedText}</span>;
