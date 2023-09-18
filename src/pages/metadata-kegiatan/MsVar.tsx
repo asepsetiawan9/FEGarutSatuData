@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { type Key, useState } from 'react';
 
 const MsVar = ({ dataDetail }) => {
@@ -33,11 +34,11 @@ const MsVar = ({ dataDetail }) => {
           <>
             <table className="w-full table-auto text-base">
               <thead>
-                <tr className="border-b">
-                  <th className="border-t px-4 py-2 text-left">
-                    Nama Variable
+                <tr>
+                  <th className="border-y px-4 py-2 text-left">
+                    Nama Variabel
                   </th>
-                  <th className="border-t px-4 py-2 text-left">
+                  <th className="border-y px-4 py-2 text-left">
                     Referensi Waktu
                   </th>
                 </tr>
@@ -46,26 +47,34 @@ const MsVar = ({ dataDetail }) => {
                 {paginatedDataset.map(
                   (
                     variabel: {
+                      slug: any;
                       referensi_waktu: string;
                       definisi: string;
                       nama_variabel: string;
                     },
                     index: Key | null | undefined
                   ) => (
-                    <tr key={index} className="border-b">
-                      <td className="px-4 py-2">
-                        <div className="font-bold">
-                          {variabel.nama_variabel
-                            .split(' ')
-                            .map(
-                              (word: string) =>
-                                word.charAt(0).toUpperCase() + word.slice(1)
-                            )
-                            .join(' ')}
-                        </div>
-                        <div> {variabel.definisi || '-'}</div>
+                    <tr key={index} className="hover:bg-gray-100">
+                      <td className="border-b px-4 py-2">
+                        <Link
+                          href={`/metadata-variabel/${variabel.slug}`}
+                          className="no-underline decoration-black hover:no-underline"
+                        >
+                          <div className="font-bold">
+                            {variabel.nama_variabel
+                              .split(' ')
+                              .map(
+                                (word: string) =>
+                                  word.charAt(0).toUpperCase() + word.slice(1)
+                              )
+                              .join(' ')}
+                          </div>
+                          <div className="text-gray-600">
+                            {variabel.definisi || '-'}
+                          </div>
+                        </Link>
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="border-b px-4 py-2">
                         {variabel.referensi_waktu || '-'}
                       </td>
                     </tr>
@@ -73,6 +82,7 @@ const MsVar = ({ dataDetail }) => {
                 )}
               </tbody>
             </table>
+
             <div className="flex justify-between">
               <div className="mt-10 flex flex-row gap-3 text-sm font-bold">
                 <div>
