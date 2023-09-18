@@ -84,25 +84,25 @@ const MsKeg = ({ dataDetail }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="font-semibold">Instansi Penyelenggara :</div>
-            <div className="font-normal">{dataDetail?.opd?.name}</div>
+            <div className="font-normal">{dataDetail?.opd?.name || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">
               Alamat Lengkap Instansi Penyelenggara :
             </div>
-            <div className="font-normal">{dataDetail?.opd?.alamat}</div>
+            <div className="font-normal">{dataDetail?.opd?.alamat || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Telpon :</div>
-            <div className="font-normal">{dataDetail?.opd?.telpon}</div>
+            <div className="font-normal">{dataDetail?.opd?.telpon || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Faksimile :</div>
-            <div className="font-normal">{dataDetail?.opd?.fax}</div>
+            <div className="font-normal">{dataDetail?.opd?.fax || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Email :</div>
-            <div className="font-normal">{dataDetail?.opd?.email}</div>
+            <div className="font-normal">{dataDetail?.opd?.email || '-'}</div>
           </div>
         </div>
         <hr />
@@ -111,11 +111,11 @@ const MsKeg = ({ dataDetail }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="font-semibold">Eslon 1:</div>
-            <div className="font-normal">{dataDetail?.pj_eslon1}</div>
+            <div className="font-normal">{dataDetail?.pj_eslon1 || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Eslon 2:</div>
-            <div className="font-normal">{dataDetail?.pj_eslon2}</div>
+            <div className="font-normal">{dataDetail?.pj_eslon2 || '-'}</div>
           </div>
           <div className="font-semibold">
             Penanggung Jawab Teknis (setingkat Eselon 3):
@@ -123,27 +123,33 @@ const MsKeg = ({ dataDetail }) => {
           <div></div>
           <div>
             <div className="font-semibold">Nama:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_name}</div>
+            <div className="font-normal">{dataDetail?.pjt_e3_name || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Jabatan:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_jabatan}</div>
+            <div className="font-normal">
+              {dataDetail?.pjt_e3_jabatan || '-'}
+            </div>
           </div>
           <div>
             <div className="font-semibold">Telpon:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_telpon}</div>
+            <div className="font-normal">
+              {dataDetail?.pjt_e3_telpon || '-'}
+            </div>
           </div>
           <div>
             <div className="font-semibold">Alamat:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_alamat}</div>
+            <div className="font-normal">
+              {dataDetail?.pjt_e3_alamat || '-'}
+            </div>
           </div>
           <div>
             <div className="font-semibold">Faksimile:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_fax}</div>
+            <div className="font-normal">{dataDetail?.pjt_e3_fax || '-'}</div>
           </div>
           <div>
             <div className="font-semibold">Email:</div>
-            <div className="font-normal">{dataDetail?.pjt_e3_email}</div>
+            <div className="font-normal">{dataDetail?.pjt_e3_email || '-'}</div>
           </div>
         </div>
         <hr />
@@ -151,11 +157,15 @@ const MsKeg = ({ dataDetail }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="font-semibold">Latar Belakang Kegiatan:</div>
-            <div className="font-normal">{dataDetail?.latar_belakang}</div>
+            <div className="font-normal">
+              {dataDetail?.latar_belakang || '-'}
+            </div>
           </div>
           <div>
             <div className="font-semibold">Tujuan Kegiatan:</div>
-            <div className="font-normal">{dataDetail?.tujuan_kegiatan}</div>
+            <div className="font-normal">
+              {dataDetail?.tujuan_kegiatan || '-'}
+            </div>
           </div>
           <div>
             <div className="font-semibold">Rencana Jadwal Kegiatan:</div>

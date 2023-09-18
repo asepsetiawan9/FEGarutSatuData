@@ -44,7 +44,7 @@ export default function Header() {
     {
       title: 'Fitur Lainnya',
       subItems: [
-        { title: 'Visualisasi', url: '/#' },
+        { title: 'Visualisasi', url: '/visualisasi' },
         { title: 'Videografis', url: '/videografik' },
       ],
     },

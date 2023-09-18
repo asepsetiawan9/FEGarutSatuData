@@ -67,6 +67,10 @@ const nextConfig = {
         source: '/metadata-indikator', // mau diganti jadi apa ?
         destination: '/metadata-indikator/Index', // path lama ?
       },
+      {
+        source: '/visualisasi', // mau diganti jadi apa ?
+        destination: '/visualisasi/Index', // path lama ?
+      },
       // {
       //   source: '/datasets/:slug',
       //   destination: '/datasets/[slug]',

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { type Key, useState } from 'react';
 
 const MsInd = ({ dataDetail }) => {
@@ -44,6 +45,7 @@ const MsInd = ({ dataDetail }) => {
                 {paginatedDataset.map(
                   (
                     indikator: {
+                      slug: any;
                       ukuran: string;
                       definisi: string;
                       nama_indikator: string;
@@ -52,16 +54,21 @@ const MsInd = ({ dataDetail }) => {
                   ) => (
                     <tr key={index} className="border-b">
                       <td className="px-4 py-2">
-                        <div className="font-bold">
-                          {indikator.nama_indikator
-                            .split(' ')
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1)
-                            )
-                            .join(' ')}
-                        </div>
-                        <div> {indikator.definisi || '-'}</div>
+                        <Link
+                          href={`/metadata-indikator/${indikator.slug}`}
+                          className="no-underline decoration-black hover:no-underline"
+                        >
+                          <div className="font-bold">
+                            {indikator.nama_indikator
+                              .split(' ')
+                              .map(
+                                (word) =>
+                                  word.charAt(0).toUpperCase() + word.slice(1)
+                              )
+                              .join(' ')}
+                          </div>
+                          <div> {indikator.definisi || '-'}</div>
+                        </Link>
                       </td>
                       <td className="px-4 py-2">{indikator.ukuran || '-'} </td>
                     </tr>
